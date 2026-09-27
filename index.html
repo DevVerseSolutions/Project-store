@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Project Store | Premium Portfolio</title>
+    
+    <!-- Monetag Ad SDK -->
+    <script src='//libtl.com/sdk.js' data-zone='11904237' data-sdk='show_11904237'></script>
+
+    <!-- Tailwind Console Warning Suppressor -->
+    <script>
+        const _warn = console.warn;
+        console.warn = (...args) => {
+            if (typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) return;
+            _warn.apply(console, args);
+        };
+    </script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f8fafc; color: #0f172a; font-family: 'Segoe UI', system-ui, sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <header class="sticky top-0 bg-white/95 backdrop-blur-md z-40 border-b border-slate-200 shadow-xs">
+        <div class="max-w-6xl mx-auto px-4 py-3.5 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <span class="text-base font-black tracking-wider uppercase text-slate-900">Project<span class="text-blue-600">Store</span></span>
+            </div>
+            <span class="text-[10px] font-mono text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 font-semibold flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Available for Projects
+            </span>
+        </div>
+    </header>
+
+    <!-- Hero Header -->
+    <section class="max-w-3xl mx-auto px-4 pt-8 pb-5 text-center">
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-2">আমাদের তৈরি প্রজেক্ট গ্যালারি</h1>
+        <p class="text-xs text-slate-500 max-w-md mx-auto">প্রজেক্টে ক্লিক করে ফুল স্ক্রিনে ইউজার ও এডমিন প্যানেল ছবি, ডেমো এবং অর্ডার অপশন দেখুন।</p>
+    </section>
+
+    <!-- 2 COLUMN / RESPONSIVE GRID -->
+    <section class="max-w-6xl mx-auto px-4 py-2 mb-16 flex-1 w-full">
+        <div id="projectsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div id="loadingText" class="col-span-full text-center py-16 text-xs text-slate-400">
+                <i class="fas fa-spinner fa-spin text-blue-600 text-lg mb-2 block"></i> প্রজেক্ট লোড হচ্ছে...
+            </div>
+        </div>
+    </section>
+
+    <!-- FULL SCREEN MOBILE-FIRST DYNAMIC MODAL -->
+    <div id="projectModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center hidden p-0 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-lg min-h-screen sm:min-h-0 sm:rounded-3xl overflow-hidden flex flex-col shadow-2xl relative my-auto">
+            
+            <!-- Modal Header (Close button & counter) -->
+            <div class="relative bg-slate-950 flex flex-col items-center justify-center select-none overflow-hidden">
+                
+                <!-- Close Button -->
+                <button onclick="closeProjectModal()" class="absolute top-3 right-3 bg-black/60 hover:bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center transition cursor-pointer z-30">
+                    <i class="fas fa-times text-xs"></i>
+                </button>
+
+                <!-- Slide Counter Badge -->
+                <div id="modalCounter" class="absolute top-3 left-3 bg-black/60 text-white text-[10px] font-mono px-2 py-0.5 rounded-full z-20">01 / 01</div>
+
+                <!-- ইউজার প্যানেল এবং এডমিন প্যানেল ছবি দেখার ট্যাব সুইচার -->
+                <div class="w-full bg-slate-900 border-b border-slate-800 px-4 pt-3 pb-2 flex justify-center gap-2 z-20">
+                    <button id="tabUserBtn" onclick="switchGalleryTab('user')" class="px-4 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 bg-blue-600 text-white shadow-sm cursor-pointer">
+                        <i class="fas fa-mobile-alt"></i> ইউজার প্যানেল
+                    </button>
+                    <button id="tabAdminBtn" onclick="switchGalleryTab('admin')" class="px-4 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:text-white cursor-pointer">
+                        <i class="fas fa-user-shield"></i> এডমিন প্যানেল
+                    </button>
+                </div>
+
+                <!-- Main Full Image Area (বড় আকারে ছবি দেখার জন্য হাইট বৃদ্ধি করা হয়েছে) -->
+                <div id="sliderTouchArea" class="w-full h-[52vh] sm:h-[460px] flex items-center justify-center p-3 relative bg-slate-900">
+                    <img id="modalImg" src="" alt="Project Preview" class="w-full h-full object-contain transition-all duration-300">
+                    
+                    <!-- Left & Right Arrow Buttons -->
+                    <button onclick="prevSlide(event)" class="absolute left-2.5 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-white hover:text-black text-white w-9 h-9 rounded-full flex items-center justify-center transition z-20">
+                        <i class="fas fa-chevron-left text-xs"></i>
+                    </button>
+                    <button onclick="nextSlide(event)" class="absolute right-2.5 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-white hover:text-black text-white w-9 h-9 rounded-full flex items-center justify-center transition z-20">
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </button>
+
+                    <!-- নো ইমেজ নোটিশ (এডমিন প্যানেলে ছবি না থাকলে এটি দেখাবে) -->
+                    <div id="noImgNotice" class="hidden flex-col items-center justify-center text-slate-400 text-xs py-16 text-center px-4">
+                        <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center mb-2">
+                            <i class="fas fa-user-lock text-amber-500 text-lg"></i>
+                        </div>
+                        <span class="font-bold text-slate-300 text-sm">এডমিন প্যানেল প্রিভিউ নেই</span>
+                        <span class="text-[11px] text-slate-500 mt-1">এই প্রজেক্টের এডমিন প্যানেলের ছবি এখনও আপলোড করা হয়নি।</span>
+                    </div>
+                </div>
+
+                <!-- Thumbnails Bar (নিচে ক্লিক করে ছবি দেখার বার) -->
+                <div id="thumbStrip" class="w-full bg-slate-950 px-3 py-2 flex items-center justify-center gap-2 overflow-x-auto hide-scrollbar z-20 border-t border-slate-800">
+                    <!-- ডাইনামিক থাম্বনেইল পিলগুলো এখানে তৈরি হবে -->
+                </div>
+            </div>
+
+            <!-- Content Details Area -->
+            <div class="p-5 space-y-4 overflow-y-auto flex-1 bg-white">
+                
+                <!-- Category Badge (বড় আকারে দেখানো হয়েছে) & Project Title -->
+                <div>
+                    <span id="modalBadge" class="text-xs sm:text-sm uppercase tracking-wider font-black px-3.5 py-1 rounded-lg bg-blue-100 text-blue-700 inline-block shadow-xs mb-1">CATEGORY</span>
+                    <h2 id="modalTitle" class="text-lg sm:text-xl font-black text-slate-900 mt-1 leading-snug">Project Name</h2>
+                </div>
+
+                <!-- Price Box (একপাশে বাংলা টাকা এবং অন্যপাশে ডলার সাজানো হয়েছে) -->
+                <div class="bg-gradient-to-r from-blue-50/90 to-slate-50 border border-blue-100 p-3.5 rounded-2xl grid grid-cols-2 gap-3 items-center">
+                    <!-- BDT -->
+                    <div class="border-r border-blue-200/60 pr-2">
+                        <span class="text-[11px] font-bold text-slate-500 block uppercase tracking-wider">মূল্য (BDT)</span>
+                        <span id="priceBDT" class="text-base sm:text-lg font-black text-blue-700 block mt-0.5">৳0</span>
+                    </div>
+                    <!-- USD -->
+                    <div class="pl-2 text-right">
+                        <span class="text-[11px] font-bold text-slate-500 block uppercase tracking-wider">মূল্য (USD)</span>
+                        <span id="priceUSD" class="text-base sm:text-lg font-black text-slate-800 block mt-0.5">$0</span>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                    <h4 class="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1.5">প্রজেক্ট ডেসক্রিপশন</h4>
+                    <p id="modalDesc" class="text-xs text-slate-600 leading-relaxed whitespace-pre-line font-medium"></p>
+                </div>
+
+                <!-- স্ক্রিনশট সংক্রান্ত নোটিশ (অর্ডার করুন বাটনের ঠিক ওপরে) -->
+                <div class="flex items-center gap-2.5 bg-amber-50 border border-amber-200/80 text-amber-900 px-3.5 py-2.5 rounded-xl text-xs font-semibold">
+                    <i class="fas fa-camera text-amber-600 text-sm shrink-0"></i>
+                    <span>যে প্রজেক্টটি নিবেন, সেটির স্ক্রিনশট মেরে অর্ডারের সময় অ্যাডমিনকে ইনবক্সে দিন।</span>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-3 pt-1 pb-2">
+                    <a id="btnDemo" href="#" target="_blank" class="bg-slate-100 text-slate-800 py-3 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-200 transition text-center flex items-center justify-center gap-1.5 border border-slate-200">
+                        <i class="fas fa-external-link-alt text-[10px]"></i> লাইভ ডেমো
+                    </a>
+                    <a id="btnOrder" href="#" target="_blank" class="bg-blue-600 text-white py-3 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-blue-700 transition text-center flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/25">
+                        <i class="fab fa-telegram-plane"></i> অর্ডার করুন
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white py-5 text-center text-[10px] font-mono text-slate-400 border-t border-slate-200">
+        <p>&copy; 2026 PROJECT STORE. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <!-- Firebase Realtime Database SDK Modules -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // ফায়ারবেস কনফিগারেশন
+        const firebaseConfig = {
+            apiKey: "AIzaSyCCni2iot1qvvaSIt2Xh79rjucIhctczdI",
+            authDomain: "digital-project-store-e8ea7.firebaseapp.com",
+            databaseURL: "https://digital-project-store-e8ea7-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "digital-project-store-e8ea7",
+            storageBucket: "digital-project-store-e8ea7.firebasestorage.app",
+            messagingSenderId: "1003438841674",
+            appId: "1:1003438841674:web:e7cdf341a0323ff0446bb3",
+            measurementId: "G-W9CFKS1C55"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        window.firebaseDatabase = {};
+
+        // রিয়েল-টাইম ডাটা লোডার
+        function listenToProjects() {
+            const grid = document.getElementById('projectsGrid');
+            const projectsRef = ref(db, 'portfolio_projects');
+
+            onValue(projectsRef, (snapshot) => {
+                const data = snapshot.val();
+                grid.innerHTML = '';
+                window.firebaseDatabase = {};
+
+                if (!data) {
+                    grid.innerHTML = '<div class="col-span-full text-center py-16 text-xs text-slate-400">কোনো প্রজেক্ট পাওয়া যায়নি।</div>';
+                    return;
+                }
+
+                const keys = Object.keys(data).reverse();
+
+                keys.forEach((id) => {
+                    const item = data[id];
+                    window.firebaseDatabase[id] = item;
+
+                    const thumbImage = item.thumb || (item.images && item.images.length > 0 ? item.images[0] : 'https://via.placeholder.com/300?text=No+Preview');
+
+                    grid.innerHTML += `
+                        <div class="bg-white border border-slate-200 rounded-2xl p-2.5 flex flex-col justify-between shadow-xs hover:shadow-md hover:border-blue-500 transition duration-200">
+                            <div>
+                                <div class="w-full aspect-[4/3] bg-slate-100 rounded-xl overflow-hidden mb-2 relative">
+                                    <img src="${thumbImage}" alt="${item.title || 'Project'}" onerror="this.src='https://via.placeholder.com/300?text=Error'" class="w-full h-full object-cover">
+                                    <span class="absolute top-1.5 left-1.5 bg-black/60 backdrop-blur-xs text-white text-[9px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
+                                        ${item.badge || 'General'}
+                                    </span>
+                                </div>
+                                <h3 class="text-xs font-bold text-slate-900 leading-tight line-clamp-2 mb-1">${item.title || 'Untitled Project'}</h3>
+                                <div class="text-[11px] font-bold text-blue-600 mb-2">${item.priceBDT || ''}</div>
+                            </div>
+                            <button onclick="handleViewProjectWithAd('${id}')" class="w-full bg-slate-900 hover:bg-blue-600 text-white py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+                                <span>বিস্তারিত দেখুন</span> <i class="fas fa-arrow-right text-[10px]"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+            }, (error) => {
+                console.error(error);
+                grid.innerHTML = '<div class="col-span-full text-center py-16 text-xs text-red-500">ডাটা লোড করতে সমস্যা হয়েছে!</div>';
+            });
+        }
+
+        listenToProjects();
+    </script>
+
+    <!-- Modal Slider & Monetag Ad Handler Controllers -->
+    <script>
+        let currentProject = null;
+        let currentImgIdx = 0;
+        let currentTab = 'user'; // 'user' or 'admin'
+        let userImagesList = [];
+        let adminImagesList = [];
+        let activeImagesList = [];
+
+        // Monetag অ্যাড দেখিয়ে পরবর্তী ধাপে নেওয়ার ফাংশন
+        function handleViewProjectWithAd(id) {
+            if (typeof window.show_11904237 === 'function') {
+                try {
+                    const adPromise = window.show_11904237();
+                    if (adPromise && typeof adPromise.then === 'function') {
+                        adPromise.then(() => {
+                            openProjectModal(id);
+                        }).catch(() => {
+                            openProjectModal(id);
+                        });
+                    } else {
+                        openProjectModal(id);
+                    }
+                } catch (e) {
+                    openProjectModal(id);
+                }
+            } else {
+                openProjectModal(id);
+            }
+        }
+
+        function openProjectModal(id) {
+            const data = window.firebaseDatabase ? window.firebaseDatabase[id] : null;
+            if (!data) return;
+
+            currentProject = data;
+            currentImgIdx = 0;
+            currentTab = 'user';
+
+            document.getElementById('modalTitle').innerText = data.title || 'Project Title';
+            document.getElementById('modalBadge').innerText = data.badge || 'Project';
+            document.getElementById('modalDesc').innerText = data.desc || 'কোনো বিবরণ নেই';
+            
+            // মূল্য ফরম্যাটিং (৳ এবং $ সিম্বলসহ)
+            let bdt = (data.priceBDT || '০').toString().trim();
+            if(!bdt.startsWith('৳') && !bdt.toLowerCase().includes('bdt')) {
+                bdt = '৳ ' + bdt;
+            }
+            let usd = (data.priceUSD || '০').toString().trim();
+            if(!usd.startsWith('$') && !usd.toLowerCase().includes('usd')) {
+                usd = '$ ' + usd;
+            }
+
+            document.getElementById('priceBDT').innerText = bdt;
+            document.getElementById('priceUSD').innerText = usd;
+            
+            document.getElementById('btnDemo').href = data.demoUrl || '#';
+            document.getElementById('btnOrder').href = data.telegramUrl || '#';
+
+            // ইউজার ছবি প্রস্তুত করা
+            let allImages = Array.isArray(data.images) ? [...data.images] : [];
+            if (data.thumb && !allImages.includes(data.thumb)) {
+                allImages = [data.thumb, ...allImages];
+            }
+
+            userImagesList = (data.userImages && data.userImages.length) ? data.userImages : allImages;
+            
+            // এডমিন ছবি শুধুমাত্র তখনই দেখাবে যখন ডাটাবেজে adminImages থাকবে
+            adminImagesList = (data.adminImages && Array.isArray(data.adminImages)) ? data.adminImages : [];
+
+            switchGalleryTab('user');
+
+            document.getElementById('projectModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProjectModal() {
+            document.getElementById('projectModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // ইউজার প্যানেল ও এডমিন প্যানেল ট্যাব সুইচ ফাংশন
+        function switchGalleryTab(tab) {
+            currentTab = tab;
+            currentImgIdx = 0;
+
+            const userBtn = document.getElementById('tabUserBtn');
+            const adminBtn = document.getElementById('tabAdminBtn');
+
+            if(tab === 'user') {
+                userBtn.className = "px-4 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 bg-blue-600 text-white shadow-sm cursor-pointer";
+                adminBtn.className = "px-4 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:text-white cursor-pointer";
+                activeImagesList = userImagesList;
+            } else {
+                adminBtn.className = "px-4 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 bg-amber-500 text-slate-950 font-black shadow-sm cursor-pointer";
+                userBtn.className = "px-4 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:text-white cursor-pointer";
+                activeImagesList = adminImagesList;
+            }
+
+            renderSlide();
+            renderThumbStrip();
+        }
+
+        function renderSlide() {
+            const imgEl = document.getElementById('modalImg');
+            const noticeEl = document.getElementById('noImgNotice');
+
+            if(!activeImagesList || activeImagesList.length === 0) {
+                imgEl.classList.add('hidden');
+                noticeEl.classList.remove('hidden');
+                document.getElementById('modalCounter').innerText = "00 / 00";
+                return;
+            }
+
+            imgEl.classList.remove('hidden');
+            noticeEl.classList.add('hidden');
+            
+            imgEl.src = activeImagesList[currentImgIdx];
+            document.getElementById('modalCounter').innerText = `${String(currentImgIdx + 1).padStart(2, '0')} / ${String(activeImagesList.length).padStart(2, '0')}`;
+            highlightActiveThumb();
+        }
+
+        // নিচে ছবিগুলোতে টিপ মেরে দেখার বার (Thumbnails Bar)
+        function renderThumbStrip() {
+            const strip = document.getElementById('thumbStrip');
+            strip.innerHTML = '';
+            
+            if (!activeImagesList || activeImagesList.length <= 1) {
+                strip.classList.add('hidden');
+                return;
+            }
+            strip.classList.remove('hidden');
+
+            activeImagesList.forEach((url, idx) => {
+                const thumbBtn = document.createElement('button');
+                thumbBtn.type = "button";
+                thumbBtn.className = `w-11 h-11 rounded-lg overflow-hidden border-2 transition shrink-0 cursor-pointer ${idx === currentImgIdx ? (currentTab === 'admin' ? 'border-amber-400 scale-105' : 'border-blue-500 scale-105') : 'border-transparent opacity-60 hover:opacity-100'}`;
+                thumbBtn.innerHTML = `<img src="${url}" onerror="this.src='https://via.placeholder.com/100'" class="w-full h-full object-cover">`;
+                thumbBtn.onclick = () => {
+                    currentImgIdx = idx;
+                    renderSlide();
+                };
+                strip.appendChild(thumbBtn);
+            });
+        }
+
+        function highlightActiveThumb() {
+            const strip = document.getElementById('thumbStrip');
+            const buttons = strip.querySelectorAll('button');
+            const activeColor = currentTab === 'admin' ? 'border-amber-400' : 'border-blue-500';
+
+            buttons.forEach((btn, idx) => {
+                if (idx === currentImgIdx) {
+                    btn.className = `w-11 h-11 rounded-lg overflow-hidden border-2 ${activeColor} scale-105 transition shrink-0 cursor-pointer`;
+                } else {
+                    btn.className = "w-11 h-11 rounded-lg overflow-hidden border-2 border-transparent opacity-60 hover:opacity-100 transition shrink-0 cursor-pointer";
+                }
+            });
+        }
+
+        function nextSlide(e) {
+            if(e) e.stopPropagation();
+            if(!activeImagesList || activeImagesList.length === 0) return;
+            currentImgIdx = (currentImgIdx + 1) % activeImagesList.length;
+            renderSlide();
+        }
+
+        function prevSlide(e) {
+            if(e) e.stopPropagation();
+            if(!activeImagesList || activeImagesList.length === 0) return;
+            currentImgIdx = (currentImgIdx - 1 + activeImagesList.length) % activeImagesList.length;
+            renderSlide();
+        }
+
+        // ফোনে সোয়াইপ ফিচার
+        let touchstartX = 0;
+        let touchendX = 0;
+        const sliderArea = document.getElementById('sliderTouchArea');
+
+        sliderArea.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        sliderArea.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, {passive: true});
+
+        function handleSwipe() {
+            if (touchendX < touchstartX - 40) nextSlide();
+            if (touchendX > touchstartX + 40) prevSlide();
+        }
+    </script>
+</body>
+</html>
