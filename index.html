@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Project Store | Premium Portfolio</title>
+    <title>Project Store | Sovereign Luxury Portfolio</title>
     
-    <!-- Monetag Ad SDK -->
+    <!-- Monetag Ad SDK (হুবহু অপরিবর্তিত) -->
     <script src='//libtl.com/sdk.js' data-zone='11904237' data-sdk='show_11904237'></script>
 
     <!-- Tailwind Console Warning Suppressor -->
@@ -16,138 +16,267 @@
             _warn.apply(console, args);
         };
     </script>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for Icons -->
+    
+    <!-- Google Premium Fonts: Syne + Outfit + Hind Siliguri -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Pro Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body { background-color: #f8fafc; color: #0f172a; font-family: 'Segoe UI', system-ui, sans-serif; }
+        * {
+            font-family: 'Outfit', 'Hind Siliguri', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background-color: #020408;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        /* Subtle Cyber Grid Pattern */
+        .cyber-grid {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+
+        /* Gold Foil Shimmer Animation */
+        @keyframes goldShimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .gold-shimmer-text {
+            background: linear-gradient(90deg, #F59E0B 0%, #FDE68A 25%, #FFFBEB 50%, #F59E0B 75%, #D97706 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: goldShimmer 6s linear infinite;
+        }
+
+        /* Luxury Frosted Glass Cards */
+        .luxe-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(15, 23, 42, 0.6) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .luxe-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(245, 158, 11, 0.45);
+            box-shadow: 0 20px 45px -10px rgba(245, 158, 11, 0.25), inset 0 0 20px rgba(245, 158, 11, 0.05);
+        }
+
+        /* Custom Scrollbar */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Floating Aurora Pulse */
+        @keyframes floatAurora {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -20px) scale(1.08); }
+        }
+        .aurora-orb {
+            animation: floatAurora 12s ease-in-out infinite;
+        }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col relative selection:bg-amber-400 selection:text-black cyber-grid">
 
-    <!-- Navbar -->
-    <header class="sticky top-0 bg-white/95 backdrop-blur-md z-40 border-b border-slate-200 shadow-xs">
-        <div class="max-w-6xl mx-auto px-4 py-3.5 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <span class="text-base font-black tracking-wider uppercase text-slate-900">Project<span class="text-blue-600">Store</span></span>
+    <!-- Mesmerizing Ambient Aurora Orbs (আকর্ষণীয় আলোর আভা) -->
+    <div class="fixed top-[-5%] left-[10%] w-[32rem] h-[32rem] bg-gradient-to-tr from-amber-600/15 to-yellow-500/10 rounded-full blur-[140px] pointer-events-none -z-10 aurora-orb"></div>
+    <div class="fixed top-[35%] right-[-5%] w-[35rem] h-[35rem] bg-gradient-to-br from-indigo-600/15 via-purple-600/10 to-blue-500/15 rounded-full blur-[160px] pointer-events-none -z-10 aurora-orb" style="animation-delay: -6s;"></div>
+    <div class="fixed bottom-[-10%] left-[25%] w-[30rem] h-[30rem] bg-emerald-500/10 rounded-full blur-[150px] pointer-events-none -z-10"></div>
+
+    <!-- Floating Island Navbar -->
+    <header class="sticky top-3 z-40 max-w-6xl mx-auto w-[94%] sm:w-full my-2">
+        <div class="bg-[#0b101d]/75 backdrop-blur-2xl border border-white/10 rounded-2xl px-4 sm:px-6 py-3 flex justify-between items-center shadow-[0_10px_35px_rgba(0,0,0,0.8)]">
+            
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3">
+                <div class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-yellow-600 p-[1px] shadow-lg shadow-amber-500/20">
+                    <div class="w-full h-full bg-[#070a14] rounded-[11px] flex items-center justify-center">
+                        <i class="fas fa-gem text-amber-400 text-sm"></i>
+                    </div>
+                </div>
+                <div>
+                    <span class="text-base font-black tracking-wider uppercase text-white font-['Syne'] block leading-none">
+                        PROJECT<span class="gold-shimmer-text">STORE</span>
+                    </span>
+                    <span class="text-[9px] font-mono tracking-widest text-slate-400 uppercase font-semibold">Sovereign Edition</span>
+                </div>
             </div>
-            <span class="text-[10px] font-mono text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 font-semibold flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Available for Projects
-            </span>
+
+            <!-- VIP Live Badge -->
+            <div class="flex items-center gap-2 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30 px-3.5 py-1.5 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-80"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span class="text-[11px] font-bold text-emerald-300 font-mono tracking-wider">Active</span>
+            </div>
+
         </div>
     </header>
 
-    <!-- Hero Header -->
-    <section class="max-w-3xl mx-auto px-4 pt-8 pb-5 text-center">
-        <h1 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-2">আমাদের তৈরি প্রজেক্ট গ্যালারি</h1>
-        <p class="text-xs text-slate-500 max-w-md mx-auto">প্রজেক্টে ক্লিক করে ফুল স্ক্রিনে ইউজার ও এডমিন প্যানেল ছবি, ডেমো এবং অর্ডার অপশন দেখুন।</p>
+    <!-- Hero Showcase Header -->
+    <section class="max-w-4xl mx-auto px-4 pt-8 pb-4 text-center relative z-10">
+        
+        <!-- Luxury Floating Tag -->
+        <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.04] border border-amber-400/30 text-amber-300 text-xs font-bold mb-4 shadow-[0_0_20px_rgba(245,158,11,0.1)] backdrop-blur-md">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
+            <span>✨ এক্সক্লুসিভ প্রজেক্ট প্রদর্শনী</span>
+        </div>
+
+        <!-- Master Title -->
+        <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight mb-3 font-['Syne'] leading-tight text-white">
+            ফিউচারিস্টিক <span class="gold-shimmer-text">ডিজিটাল আর্টওয়ার্ক</span>
+        </h1>
+
+        <p class="text-xs sm:text-sm text-slate-400 max-w-lg mx-auto leading-relaxed font-normal">
+            ইউজার ইন্টারফেস ও পাওয়ারফুল এডমিন প্যানেল ঘুরে দেখুন। প্রজেক্টে ক্লিক করে সম্পূর্ণ ছবি, লাইভ ডেমো এবং বিবরণ এক পলকে উপভোগ করুন।
+        </p>
+
+        <!-- Trust Badges Bar -->
+        <div class="flex items-center justify-center gap-3 sm:gap-6 mt-6 text-[11px] font-semibold text-slate-400">
+            <div class="flex items-center gap-1.5"><i class="fas fa-bolt text-amber-400"></i> ইনস্ট্যান্ট ডেমো</div>
+            <div class="w-1 h-1 rounded-full bg-slate-700"></div>
+            <div class="flex items-center gap-1.5"><i class="fas fa-shield-check text-emerald-400"></i> ১০০% সিকিউরিটি কোড</div>
+            <div class="w-1 h-1 rounded-full bg-slate-700"></div>
+            <div class="flex items-center gap-1.5"><i class="fas fa-headset text-sky-400"></i> ২৪/৭ এডমিন সাপোর্ট</div>
+        </div>
     </section>
 
-    <!-- 2 COLUMN / RESPONSIVE GRID -->
-    <section class="max-w-6xl mx-auto px-4 py-2 mb-16 flex-1 w-full">
-        <div id="projectsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-            <div id="loadingText" class="col-span-full text-center py-16 text-xs text-slate-400">
-                <i class="fas fa-spinner fa-spin text-blue-600 text-lg mb-2 block"></i> প্রজেক্ট লোড হচ্ছে...
+    <!-- 2 Column / Ultra-Luxe Responsive Grid -->
+    <section class="max-w-7xl mx-auto px-3 sm:px-6 py-4 mb-20 flex-1 w-full relative z-10">
+        <div id="projectsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-5">
+            <!-- Loading Indicator -->
+            <div id="loadingText" class="col-span-full text-center py-28">
+                <div class="relative w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                    <div class="absolute inset-0 rounded-full border-2 border-dashed border-amber-400/40 animate-spin"></div>
+                    <div class="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center">
+                        <i class="fas fa-crown text-amber-400 text-lg"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-amber-200/80 font-mono tracking-widest uppercase">প্রজেক্ট ডেটা লোড হচ্ছে...</p>
             </div>
         </div>
     </section>
 
-    <!-- FULL SCREEN MOBILE-FIRST DYNAMIC MODAL -->
-    <div id="projectModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center hidden p-0 sm:p-4 overflow-y-auto">
-        <div class="bg-white w-full max-w-lg min-h-screen sm:min-h-0 sm:rounded-3xl overflow-hidden flex flex-col shadow-2xl relative my-auto">
+    <!-- FULL SCREEN MOBILE-FIRST ULTRA-LUXURY MODAL -->
+    <div id="projectModal" class="fixed inset-0 bg-black/92 backdrop-blur-2xl z-50 flex items-center justify-center hidden p-0 sm:p-4 overflow-y-auto">
+        <div class="bg-[#080d19] border border-white/15 w-full max-w-xl min-h-screen sm:min-h-0 sm:rounded-3xl overflow-hidden flex flex-col shadow-[0_0_60px_rgba(0,0,0,0.9)] relative my-auto">
             
             <!-- Modal Header (Close button & counter) -->
-            <div class="relative bg-slate-950 flex flex-col items-center justify-center select-none overflow-hidden">
+            <div class="relative bg-[#04060d] flex flex-col items-center justify-center select-none overflow-hidden border-b border-white/10">
                 
                 <!-- Close Button -->
-                <button onclick="closeProjectModal()" class="absolute top-3 right-3 bg-black/60 hover:bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center transition cursor-pointer z-30">
+                <button onclick="closeProjectModal()" class="absolute top-3.5 right-3.5 bg-white/10 hover:bg-rose-600 text-white w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer z-30 border border-white/15 backdrop-blur-xl shadow-lg">
                     <i class="fas fa-times text-xs"></i>
                 </button>
 
                 <!-- Slide Counter Badge -->
-                <div id="modalCounter" class="absolute top-3 left-3 bg-black/60 text-white text-[10px] font-mono px-2 py-0.5 rounded-full z-20">01 / 01</div>
+                <div id="modalCounter" class="absolute top-3.5 left-3.5 bg-black/75 border border-amber-400/30 text-amber-300 text-[11px] font-mono font-bold px-3 py-1 rounded-full z-20 backdrop-blur-xl shadow-sm">
+                    01 / 01
+                </div>
 
-                <!-- ইউজার প্যানেল এবং এডমিন প্যানেল ছবি দেখার ট্যাব সুইচার -->
-                <div class="w-full bg-slate-900 border-b border-slate-800 px-4 pt-3 pb-2 flex justify-center gap-2 z-20">
-                    <button id="tabUserBtn" onclick="switchGalleryTab('user')" class="px-4 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 bg-blue-600 text-white shadow-sm cursor-pointer">
-                        <i class="fas fa-mobile-alt"></i> ইউজার প্যানেল
+                <!-- ইউজার প্যানেল এবং এডমিন প্যানেল ছবি দেখার লাক্সারি ট্যাব সুইচার -->
+                <div class="w-full bg-[#060a14] border-b border-white/5 px-4 pt-3.5 pb-2.5 flex justify-center gap-2.5 z-20">
+                    <button id="tabUserBtn" onclick="switchGalleryTab('user')" class="px-5 py-2 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-2 cursor-pointer">
+                        <i class="fas fa-mobile-screen"></i> ইউজার প্যানেল
                     </button>
-                    <button id="tabAdminBtn" onclick="switchGalleryTab('admin')" class="px-4 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:text-white cursor-pointer">
-                        <i class="fas fa-user-shield"></i> এডমিন প্যানেল
+                    <button id="tabAdminBtn" onclick="switchGalleryTab('admin')" class="px-5 py-2 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-2 cursor-pointer">
+                        <i class="fas fa-shield-halved"></i> এডমিন প্যানেল
                     </button>
                 </div>
 
                 <!-- Main Full Image Area -->
-                <div id="sliderTouchArea" class="w-full h-[52vh] sm:h-[460px] flex items-center justify-center p-3 relative bg-slate-900">
-                    <img id="modalImg" src="" alt="Project Preview" class="w-full h-full object-contain transition-all duration-300">
+                <div id="sliderTouchArea" class="w-full h-[52vh] sm:h-[470px] flex items-center justify-center p-3 sm:p-4 relative bg-[#02050b]">
+                    <img id="modalImg" src="" alt="Project Preview" class="w-full h-full object-contain transition-all duration-300 drop-shadow-[0_15px_30px_rgba(0,0,0,0.9)]">
                     
                     <!-- Left & Right Arrow Buttons -->
-                    <button onclick="prevSlide(event)" class="absolute left-2.5 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-white hover:text-black text-white w-9 h-9 rounded-full flex items-center justify-center transition z-20">
+                    <button onclick="prevSlide(event)" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-amber-400 hover:text-black text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 border border-white/15 backdrop-blur-xl z-20 shadow-xl cursor-pointer">
                         <i class="fas fa-chevron-left text-xs"></i>
                     </button>
-                    <button onclick="nextSlide(event)" class="absolute right-2.5 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-white hover:text-black text-white w-9 h-9 rounded-full flex items-center justify-center transition z-20">
+                    <button onclick="nextSlide(event)" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-amber-400 hover:text-black text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 border border-white/15 backdrop-blur-xl z-20 shadow-xl cursor-pointer">
                         <i class="fas fa-chevron-right text-xs"></i>
                     </button>
 
                     <!-- নো ইমেজ নোটিশ -->
                     <div id="noImgNotice" class="hidden flex-col items-center justify-center text-slate-400 text-xs py-16 text-center px-4">
-                        <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center mb-2">
-                            <i class="fas fa-user-lock text-amber-500 text-lg"></i>
+                        <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center mb-3 text-amber-400 text-xl shadow-lg">
+                            <i class="fas fa-lock"></i>
                         </div>
-                        <span class="font-bold text-slate-300 text-sm">এডমিন প্যানেল প্রিভিউ নেই</span>
-                        <span class="text-[11px] text-slate-500 mt-1">এই প্রজেক্টের এডমিন প্যানেলের ছবি এখনও আপলোড করা হয়নি।</span>
+                        <span class="font-bold text-slate-200 text-sm">এডমিন প্যানেল প্রিভিউ নেই</span>
+                        <span class="text-[11px] text-slate-400 mt-1 max-w-xs">এই প্রজেক্টের এডমিন প্যানেল স্ক্রিনশট এখনও আপলোড করা হয়নি।</span>
                     </div>
                 </div>
 
                 <!-- Thumbnails Bar -->
-                <div id="thumbStrip" class="w-full bg-slate-950 px-3 py-2 flex items-center justify-center gap-2 overflow-x-auto hide-scrollbar z-20 border-t border-slate-800"></div>
+                <div id="thumbStrip" class="w-full bg-[#04060e] px-4 py-2.5 flex items-center justify-center gap-2.5 overflow-x-auto hide-scrollbar z-20 border-t border-white/5"></div>
             </div>
 
             <!-- Content Details Area -->
-            <div class="p-5 space-y-4 overflow-y-auto flex-1 bg-white">
+            <div class="p-5 sm:p-6 space-y-4 overflow-y-auto flex-1 bg-[#080d19]">
                 
                 <!-- Category Badge & Project Title -->
                 <div>
-                    <span id="modalBadge" class="text-xs sm:text-sm uppercase tracking-wider font-black px-3.5 py-1 rounded-lg bg-blue-100 text-blue-700 inline-block shadow-xs mb-1">CATEGORY</span>
-                    <h2 id="modalTitle" class="text-lg sm:text-xl font-black text-slate-900 mt-1 leading-snug">Project Name</h2>
+                    <span id="modalBadge" class="text-[10px] sm:text-xs uppercase tracking-widest font-black px-3.5 py-1 rounded-full bg-gradient-to-r from-amber-500/20 to-yellow-500/10 border border-amber-400/40 text-amber-300 inline-block mb-2 font-mono">
+                        CATEGORY
+                    </span>
+                    <h2 id="modalTitle" class="text-xl sm:text-2xl font-black text-white mt-0.5 leading-snug tracking-tight font-['Syne']">
+                        Project Name
+                    </h2>
                 </div>
 
-                <!-- Price Box (BDT এবং USD) -->
-                <div class="bg-gradient-to-r from-blue-50/90 to-slate-50 border border-blue-100 p-3.5 rounded-2xl grid grid-cols-2 gap-3 items-center">
+                <!-- Dynamic Dual Price Box (BDT & USD) -->
+                <div class="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-r from-[#0d1424] via-[#111a30] to-[#0d1424] p-4 grid grid-cols-2 gap-3 items-center shadow-xl">
+                    <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                    
                     <!-- BDT -->
-                    <div class="border-r border-blue-200/60 pr-2">
-                        <span class="text-[11px] font-bold text-slate-500 block uppercase tracking-wider">মূল্য (BDT)</span>
-                        <span id="priceBDT" class="text-base sm:text-lg font-black text-emerald-600 block mt-0.5">৳0</span>
+                    <div class="border-r border-white/10 pr-2">
+                        <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-widest font-mono">মূল্য (বাংলাদেশী টাকা)</span>
+                        <span id="priceBDT" class="text-xl sm:text-2xl font-black text-amber-400 block mt-1 font-['Outfit']">৳0</span>
                     </div>
                     <!-- USD -->
                     <div class="pl-2 text-right">
-                        <span class="text-[11px] font-bold text-slate-500 block uppercase tracking-wider">মূল্য (USD)</span>
-                        <span id="priceUSD" class="text-base sm:text-lg font-black text-blue-600 block mt-0.5">$0</span>
+                        <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-widest font-mono">মূল্য (ইউএস ডলার)</span>
+                        <span id="priceUSD" class="text-xl sm:text-2xl font-black text-sky-400 block mt-1 font-['Outfit']">$0</span>
                     </div>
                 </div>
 
-                <!-- Description -->
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                    <h4 class="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1.5">প্রজেক্ট ডেসক্রিপশন</h4>
-                    <p id="modalDesc" class="text-xs text-slate-600 leading-relaxed whitespace-pre-line font-medium"></p>
+                <!-- Description Box -->
+                <div class="bg-black/30 p-4 rounded-2xl border border-white/5">
+                    <h4 class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-2 flex items-center gap-1.5 font-mono">
+                        <i class="fas fa-align-left text-amber-400"></i> সম্পূর্ণ প্রজেক্ট ডেসক্রিপশন
+                    </h4>
+                    <p id="modalDesc" class="text-xs text-slate-300 leading-relaxed whitespace-pre-line font-normal"></p>
                 </div>
 
                 <!-- স্ক্রিনশট সংক্রান্ত নোটিশ -->
-                <div class="flex items-center gap-2.5 bg-amber-50 border border-amber-200/80 text-amber-900 px-3.5 py-2.5 rounded-xl text-xs font-semibold">
-                    <i class="fas fa-camera text-amber-600 text-sm shrink-0"></i>
+                <div class="flex items-center gap-3 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-400/30 text-amber-200/90 px-4 py-3 rounded-2xl text-xs font-semibold">
+                    <div class="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center shrink-0 text-amber-400 text-sm shadow-sm">
+                        <i class="fas fa-camera"></i>
+                    </div>
                     <span>যে প্রজেক্টটি নিবেন, সেটির স্ক্রিনশট মেরে অর্ডারের সময় অ্যাডমিনকে ইনবক্সে দিন।</span>
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="grid grid-cols-2 gap-3 pt-1 pb-2">
-                    <a id="btnDemo" href="#" target="_blank" class="bg-slate-100 text-slate-800 py-3 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-200 transition text-center flex items-center justify-center gap-1.5 border border-slate-200">
-                        <i class="fas fa-external-link-alt text-[10px]"></i> লাইভ ডেমো
+                <div class="grid grid-cols-2 gap-3 pt-2 pb-2">
+                    <a id="btnDemo" href="#" target="_blank" class="bg-white/5 hover:bg-white/10 text-slate-200 border border-white/15 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition text-center flex items-center justify-center gap-2 hover:border-white/30 cursor-pointer shadow-md">
+                        <i class="fas fa-arrow-up-right-from-square text-[11px] text-sky-400"></i> লাইভ ডেমো
                     </a>
-                    <a id="btnOrder" href="#" target="_blank" class="bg-blue-600 text-white py-3 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-blue-700 transition text-center flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/25">
-                        <i class="fab fa-telegram-plane"></i> অর্ডার করুন
+                    <a id="btnOrder" href="#" target="_blank" class="bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 py-3.5 rounded-xl font-black text-xs uppercase tracking-wider transition text-center flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.3)] cursor-pointer">
+                        <i class="fab fa-telegram-plane text-sm"></i> অর্ডার করুন
                     </a>
                 </div>
             </div>
@@ -155,12 +284,12 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-white py-5 text-center text-[10px] font-mono text-slate-400 border-t border-slate-200">
-        <p>&copy; 2026 PROJECT STORE. ALL RIGHTS RESERVED.</p>
+    <!-- Luxury Minimal Footer -->
+    <footer class="bg-[#02050c] py-6 text-center text-[10px] font-mono text-slate-500 border-t border-white/5 mt-auto relative z-10">
+        <p class="tracking-widest uppercase">&copy; 2026 PROJECT STORE • ALL RIGHTS RESERVED • CRAFTED WITH PRIDE</p>
     </footer>
 
-    <!-- Firebase Realtime Database SDK Modules -->
+    <!-- Firebase Realtime Database SDK Modules (সম্পূর্ণ অবিকল ও সুরক্ষিত) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -193,7 +322,7 @@
                 window.firebaseDatabase = {};
 
                 if (!data) {
-                    grid.innerHTML = '<div class="col-span-full text-center py-16 text-xs text-slate-400">কোনো প্রজেক্ট পাওয়া যায়নি।</div>';
+                    grid.innerHTML = '<div class="col-span-full text-center py-24 text-xs text-slate-500 font-mono">কোনো প্রজেক্ট পাওয়া যায়নি।</div>';
                     return;
                 }
 
@@ -203,53 +332,66 @@
                     const item = data[id];
                     window.firebaseDatabase[id] = item;
 
-                    const thumbImage = item.thumb || (item.images && item.images.length > 0 ? item.images[0] : 'https://via.placeholder.com/300?text=No+Preview');
+                    const thumbImage = item.thumb || (item.images && item.images.length > 0 ? item.images[0] : 'https://via.placeholder.com/400x300/060b17/ffffff?text=VIP+Preview');
 
                     // বাংলা টাকা এবং ইউএস ডলার ফরম্যাটিং
                     let cleanBDT = (item.priceBDT || '0').toString().trim().replace(/^[৳\s]+/, '').replace(/bdt/i, '').trim();
                     let cleanUSD = (item.priceUSD || '0').toString().trim().replace(/^[\$\s]+/, '').replace(/usd/i, '').trim();
 
                     grid.innerHTML += `
-                        <div class="bg-white border border-slate-200 rounded-2xl p-2.5 flex flex-col justify-between shadow-xs hover:shadow-md hover:border-blue-500 transition duration-200">
+                        <div class="group luxe-card rounded-2xl p-2.5 sm:p-3 flex flex-col justify-between relative overflow-hidden">
+                            <!-- Shimmer Top Bar -->
+                            <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-400/30 to-transparent group-hover:via-amber-400 transition-all duration-500"></div>
+
                             <div>
-                                <div class="w-full aspect-[4/3] bg-slate-100 rounded-xl overflow-hidden mb-2 relative">
-                                    <img src="${thumbImage}" alt="${item.title || 'Project'}" onerror="this.src='https://via.placeholder.com/300?text=Error'" class="w-full h-full object-cover">
-                                    <span class="absolute top-1.5 left-1.5 bg-black/60 backdrop-blur-xs text-white text-[9px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
-                                        ${item.badge || 'General'}
+                                <!-- Image Frame with Luxury Overlay -->
+                                <div class="w-full aspect-[4/3] bg-black/60 rounded-xl overflow-hidden mb-2.5 relative border border-white/5">
+                                    <img src="${thumbImage}" alt="${item.title || 'Project'}" onerror="this.src='https://via.placeholder.com/400x300/060b17/ffffff?text=Image+Unavailable'" class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out">
+                                    
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent pointer-events-none"></div>
+
+                                    <!-- Category Pill -->
+                                    <span class="absolute top-2 left-2 bg-black/75 backdrop-blur-md border border-white/10 text-amber-300 text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider font-mono shadow-sm">
+                                        ${item.badge || 'VIP'}
                                     </span>
                                 </div>
-                                <h3 class="text-xs font-bold text-slate-900 leading-tight line-clamp-2 mb-2">${item.title || 'Untitled Project'}</h3>
+
+                                <!-- Project Title -->
+                                <h3 class="text-xs sm:text-sm font-bold text-slate-100 group-hover:text-amber-300 transition-colors leading-snug line-clamp-2 mb-2 px-0.5 font-['Outfit']">
+                                    ${item.title || 'Untitled Project'}
+                                </h3>
                                 
-                                <!-- প্রাইস সেকশন (বাংলা টাকা এবং ইউএস ডলার পাশাপাশি লোগোসহ) -->
-                                <div class="flex items-center justify-between bg-slate-50 border border-slate-200/80 rounded-xl px-2.5 py-1.5 mb-2.5">
-                                    <!-- বাংলা টাকা -->
-                                    <div class="flex items-center gap-1 font-black text-emerald-600 text-xs">
-                                        <span class="text-sm leading-none font-bold">৳</span>
+                                <!-- Dual Price Tag (BDT & USD) -->
+                                <div class="flex items-center justify-between bg-black/50 border border-white/5 rounded-xl px-2.5 py-2 mb-3">
+                                    <div class="flex items-center gap-1 font-black text-amber-400 text-xs sm:text-sm font-['Outfit']">
+                                        <span class="text-xs">৳</span>
                                         <span>${cleanBDT}</span>
                                     </div>
-                                    <!-- ডলার -->
-                                    <div class="flex items-center gap-0.5 font-black text-blue-600 text-xs">
-                                        <i class="fas fa-dollar-sign text-[11px]"></i>
+                                    <div class="flex items-center gap-0.5 font-black text-sky-400 text-xs sm:text-sm font-['Outfit']">
+                                        <span class="text-xs">$</span>
                                         <span>${cleanUSD}</span>
                                     </div>
                                 </div>
                             </div>
-                            <button onclick="handleViewProjectWithAd('${id}')" class="w-full bg-slate-900 hover:bg-blue-600 text-white py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
-                                <span>বিস্তারিত দেখুন</span> <i class="fas fa-arrow-right text-[10px]"></i>
+
+                            <!-- Button with Hover Glow -->
+                            <button onclick="handleViewProjectWithAd('${id}')" class="w-full bg-white/5 hover:bg-gradient-to-r hover:from-amber-400 hover:to-amber-500 text-slate-200 hover:text-slate-950 py-2 sm:py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 border border-white/10 hover:border-transparent hover:shadow-[0_0_20px_rgba(245,158,11,0.35)] cursor-pointer">
+                                <span>বিস্তারিত দেখুন</span>
+                                <i class="fas fa-chevron-right text-[10px]"></i>
                             </button>
                         </div>
                     `;
                 });
             }, (error) => {
                 console.error(error);
-                grid.innerHTML = '<div class="col-span-full text-center py-16 text-xs text-red-500">ডাটা লোড করতে সমস্যা হয়েছে!</div>';
+                grid.innerHTML = '<div class="col-span-full text-center py-24 text-xs text-rose-400 font-mono">ডাটা লোড করতে সমস্যা হয়েছে!</div>';
             });
         }
 
         listenToProjects();
     </script>
 
-    <!-- Modal Slider & Monetag Ad Handler Controllers -->
+    <!-- Modal Slider & Monetag Ad Handler Controllers (সম্পূর্ণ অবিকল ও সুরক্ষিত) -->
     <script>
         let currentProject = null;
         let currentImgIdx = 0;
@@ -333,12 +475,12 @@
             const adminBtn = document.getElementById('tabAdminBtn');
 
             if(tab === 'user') {
-                userBtn.className = "px-4 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 bg-blue-600 text-white shadow-sm cursor-pointer";
-                adminBtn.className = "px-4 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:text-white cursor-pointer";
+                userBtn.className = "px-5 py-2 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-2 bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg shadow-sky-500/30 cursor-pointer";
+                adminBtn.className = "px-5 py-2 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-2 bg-white/5 text-slate-400 hover:text-white border border-white/5 cursor-pointer";
                 activeImagesList = userImagesList;
             } else {
-                adminBtn.className = "px-4 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 bg-amber-500 text-slate-950 font-black shadow-sm cursor-pointer";
-                userBtn.className = "px-4 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:text-white cursor-pointer";
+                adminBtn.className = "px-5 py-2 rounded-full text-xs font-black transition-all duration-300 flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 text-slate-950 shadow-lg shadow-amber-500/30 cursor-pointer";
+                userBtn.className = "px-5 py-2 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-2 bg-white/5 text-slate-400 hover:text-white border border-white/5 cursor-pointer";
                 activeImagesList = adminImagesList;
             }
 
@@ -379,7 +521,7 @@
             activeImagesList.forEach((url, idx) => {
                 const thumbBtn = document.createElement('button');
                 thumbBtn.type = "button";
-                thumbBtn.className = `w-11 h-11 rounded-lg overflow-hidden border-2 transition shrink-0 cursor-pointer ${idx === currentImgIdx ? (currentTab === 'admin' ? 'border-amber-400 scale-105' : 'border-blue-500 scale-105') : 'border-transparent opacity-60 hover:opacity-100'}`;
+                thumbBtn.className = `w-12 h-12 rounded-xl overflow-hidden border transition-all shrink-0 cursor-pointer ${idx === currentImgIdx ? (currentTab === 'admin' ? 'border-amber-400 ring-2 ring-amber-400/50 scale-105' : 'border-sky-400 ring-2 ring-sky-400/50 scale-105') : 'border-white/10 opacity-40 hover:opacity-100'}`;
                 thumbBtn.innerHTML = `<img src="${url}" onerror="this.src='https://via.placeholder.com/100'" class="w-full h-full object-cover">`;
                 thumbBtn.onclick = () => {
                     currentImgIdx = idx;
@@ -392,13 +534,15 @@
         function highlightActiveThumb() {
             const strip = document.getElementById('thumbStrip');
             const buttons = strip.querySelectorAll('button');
-            const activeColor = currentTab === 'admin' ? 'border-amber-400' : 'border-blue-500';
+            const activeClass = currentTab === 'admin' 
+                ? 'border-amber-400 ring-2 ring-amber-400/50 scale-105 opacity-100' 
+                : 'border-sky-400 ring-2 ring-sky-400/50 scale-105 opacity-100';
 
             buttons.forEach((btn, idx) => {
                 if (idx === currentImgIdx) {
-                    btn.className = `w-11 h-11 rounded-lg overflow-hidden border-2 ${activeColor} scale-105 transition shrink-0 cursor-pointer`;
+                    btn.className = `w-12 h-12 rounded-xl overflow-hidden border transition-all shrink-0 cursor-pointer ${activeClass}`;
                 } else {
-                    btn.className = "w-11 h-11 rounded-lg overflow-hidden border-2 border-transparent opacity-60 hover:opacity-100 transition shrink-0 cursor-pointer";
+                    btn.className = "w-12 h-12 rounded-xl overflow-hidden border border-white/10 opacity-40 hover:opacity-100 transition-all shrink-0 cursor-pointer";
                 }
             });
         }
