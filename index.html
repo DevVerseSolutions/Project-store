@@ -250,7 +250,7 @@
         </div>
     </section>
 
-    <!-- ব্যবহারকারী সাইটে ঢুকলেই স্বয়ংক্রিয় নোটিশ পপআপ (WELCOME NOTICE MODAL) -->
+    <!-- এডমিন প্যানেল থেকে নিয়ন্ত্রিত রিয়েল-টাইম নোটিশ পপআপ (DYNAMIC REALTIME NOTICE MODAL) -->
     <div id="welcomeNoticeModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-50 flex items-center justify-center hidden p-4">
         <div class="bg-[#0b101d] border border-amber-400/30 w-full max-w-md rounded-3xl p-6 shadow-[0_0_50px_rgba(245,158,11,0.25)] relative overflow-hidden text-center transform transition-all duration-300">
             <!-- Ambient Glow -->
@@ -260,11 +260,13 @@
                 <i class="fas fa-bell"></i>
             </div>
 
-            <h3 class="text-lg sm:text-xl font-black text-white font-['Syne'] tracking-wide mb-2">
+            <!-- ডাইনামিক নোটিশ টাইটেল -->
+            <h3 id="noticeModalTitle" class="text-lg sm:text-xl font-black text-white font-['Syne'] tracking-wide mb-2">
                 📢 জরুরী <span class="gold-shimmer-text">বিজ্ঞপ্তি</span>
             </h3>
 
-            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal mb-5">
+            <!-- ডাইনামিক নোটিশ ডেসক্রিপশন -->
+            <p id="noticeModalDesc" class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal mb-5 whitespace-pre-line">
                 আমাদের প্রজেক্ট স্টোরে আপনাকে স্বাগতম! আপনার পছন্দের যেকোনো প্রজেক্ট সিলেক্ট করে লাইভ ডেমো দেখে সরাসরি এডমিনের সাথে যোগাযোগ করুন।
             </p>
 
@@ -391,7 +393,7 @@
         <p class="tracking-widest uppercase">&copy; 2026 PROJECT STORE • ALL RIGHTS RESERVED • CRAFTED WITH PRIDE</p>
     </footer>
 
-    <!-- Firebase Realtime Database SDK Modules & Telegram Auto Registration -->
+    <!-- Firebase Realtime Database SDK Modules, Telegram Auto Registration & Live Notice Receiver -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue, get, set, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -543,9 +545,31 @@
             });
         }
 
+        // এডমিন প্যানেল থেকে রিয়েল-টাইম নোটিশ রিসিভার ও ডিসপ্লে কন্ট্রোলার
+        function listenToRealtimeNotice() {
+            const noticeRef = ref(db, 'site_notice');
+            onValue(noticeRef, (snapshot) => {
+                const notice = snapshot.val();
+                const modal = document.getElementById('welcomeNoticeModal');
+                const titleEl = document.getElementById('noticeModalTitle');
+                const descEl = document.getElementById('noticeModalDesc');
+
+                // যদি এডমিন প্যানেল থেকে নোটিশ পাবলিশ করা থাকে এবং Active থাকে
+                if (notice && notice.isActive !== false && notice.title) {
+                    if (titleEl) titleEl.innerText = notice.title;
+                    if (descEl) descEl.innerText = notice.message || '';
+                    if (modal) modal.classList.remove('hidden');
+                } else {
+                    // নোটিশ বন্ধ বা ডিলিট থাকলে ইউজারদের কাছে শো করবে না
+                    if (modal) modal.classList.add('hidden');
+                }
+            });
+        }
+
         // ইনিশিয়ালাইজেশন
         handleTelegramAutoAuth();
         listenToProjects();
+        listenToRealtimeNotice();
     </script>
 
     <!-- Modal Slider, Auto Notice & Monetag Ad Handler Controllers -->
@@ -556,16 +580,6 @@
         let userImagesList = [];
         let adminImagesList = [];
         let activeImagesList = [];
-
-        // ইউজার পেজে ঢুকলে স্বয়ংক্রিয় নোটিশ শো করানোর ফাংশন
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                const noticeModal = document.getElementById('welcomeNoticeModal');
-                if (noticeModal) {
-                    noticeModal.classList.remove('hidden');
-                }
-            }, 500);
-        });
 
         function closeWelcomeNotice() {
             const noticeModal = document.getElementById('welcomeNoticeModal');
