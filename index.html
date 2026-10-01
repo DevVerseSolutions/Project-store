@@ -170,12 +170,12 @@
 </head>
 <body class="min-h-screen flex flex-col relative selection:bg-amber-400 selection:text-black cyber-grid">
 
-    <!-- Mesmerizing Ambient Aurora Orbs (আকর্ষণীয় আলোর আভা) -->
+    <!-- Mesmerizing Ambient Aurora Orbs -->
     <div class="fixed top-[-5%] left-[10%] w-[32rem] h-[32rem] bg-gradient-to-tr from-amber-600/15 to-yellow-500/10 rounded-full blur-[140px] pointer-events-none -z-10 aurora-orb"></div>
     <div class="fixed top-[35%] right-[-5%] w-[35rem] h-[35rem] bg-gradient-to-br from-indigo-600/15 via-purple-600/10 to-blue-500/15 rounded-full blur-[160px] pointer-events-none -z-10 aurora-orb" style="animation-delay: -6s;"></div>
     <div class="fixed bottom-[-10%] left-[25%] w-[30rem] h-[30rem] bg-emerald-500/10 rounded-full blur-[150px] pointer-events-none -z-10"></div>
 
-    <!-- Floating Island Navbar (মোবাইলের জন্য সাইজ অপ্টিমাইজড) -->
+    <!-- Floating Island Navbar -->
     <header class="sticky top-2 sm:top-3 z-40 max-w-6xl mx-auto w-[95%] sm:w-full my-1.5 sm:my-2">
         <div class="bg-[#0b101d]/85 backdrop-blur-2xl border border-white/10 rounded-2xl px-3 sm:px-6 py-2.5 sm:py-3 flex justify-between items-center gap-2 shadow-[0_10px_35px_rgba(0,0,0,0.8)]">
             
@@ -208,14 +208,11 @@
 
     <!-- Hero Showcase Header -->
     <section class="max-w-4xl mx-auto px-4 pt-8 pb-4 text-center relative z-10">
-        
-        <!-- Luxury Floating Tag -->
         <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.04] border border-amber-400/30 text-amber-300 text-xs font-bold mb-4 shadow-[0_0_20px_rgba(245,158,11,0.1)] backdrop-blur-md">
             <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
             <span>✨ এক্সক্লুসিভ প্রজেক্ট প্রদর্শনী</span>
         </div>
 
-        <!-- Master Title -->
         <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight mb-3 font-['Syne'] leading-tight text-white">
             ফিউচারিস্টিক <span class="gold-shimmer-text">ডিজিটাল আর্টওয়ার্ক</span>
         </h1>
@@ -224,7 +221,6 @@
             ইউজার ইন্টারফেস ও পাওয়ারফুল এডমিন প্যানেল ঘুরে দেখুন। প্রজেক্টে ক্লিক করে সম্পূর্ণ ছবি, লাইভ ডেমো এবং বিবরণ এক পলকে উপভোগ করুন।
         </p>
 
-        <!-- Trust Badges Bar -->
         <div class="flex items-center justify-center gap-3 sm:gap-6 mt-6 text-[11px] font-semibold text-slate-400">
             <div class="flex items-center gap-1.5"><i class="fas fa-bolt text-amber-400"></i> ইনস্ট্যান্ট ডেমো</div>
             <div class="w-1 h-1 rounded-full bg-slate-700"></div>
@@ -237,7 +233,6 @@
     <!-- 2 Column / Ultra-Luxe Responsive Grid -->
     <section class="max-w-7xl mx-auto px-3 sm:px-6 py-4 mb-20 flex-1 w-full relative z-10">
         <div id="projectsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-5">
-            <!-- Loading Indicator -->
             <div id="loadingText" class="col-span-full text-center py-28">
                 <div class="relative w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                     <div class="absolute inset-0 rounded-full border-2 border-dashed border-amber-400/40 animate-spin"></div>
@@ -250,22 +245,19 @@
         </div>
     </section>
 
-    <!-- এডমিন প্যানেল থেকে নিয়ন্ত্রিত রিয়েল-টাইম নোটিশ পপআপ (DYNAMIC REALTIME NOTICE MODAL) -->
+    <!-- রিয়েল-টাইম নোটিশ পপআপ -->
     <div id="welcomeNoticeModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-50 flex items-center justify-center hidden p-4">
         <div class="bg-[#0b101d] border border-amber-400/30 w-full max-w-md rounded-3xl p-6 shadow-[0_0_50px_rgba(245,158,11,0.25)] relative overflow-hidden text-center transform transition-all duration-300">
-            <!-- Ambient Glow -->
             <div class="absolute -right-8 -top-8 w-24 h-24 bg-amber-500/20 rounded-full blur-2xl pointer-events-none"></div>
 
             <div class="w-14 h-14 mx-auto mb-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl shadow-lg">
                 <i class="fas fa-bell"></i>
             </div>
 
-            <!-- ডাইনামিক নোটিশ টাইটেল -->
             <h3 id="noticeModalTitle" class="text-lg sm:text-xl font-black text-white font-['Syne'] tracking-wide mb-2">
                 📢 জরুরী <span class="gold-shimmer-text">বিজ্ঞপ্তি</span>
             </h3>
 
-            <!-- ডাইনামিক নোটিশ ডেসক্রিপশন -->
             <p id="noticeModalDesc" class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal mb-5 whitespace-pre-line">
                 আমাদের প্রজেক্ট স্টোরে আপনাকে স্বাগতম! আপনার পছন্দের যেকোনো প্রজেক্ট সিলেক্ট করে লাইভ ডেমো দেখে সরাসরি এডমিনের সাথে যোগাযোগ করুন।
             </p>
@@ -282,18 +274,14 @@
             
             <!-- Modal Header (Close button & counter) -->
             <div class="relative bg-[#04060d] flex flex-col items-center justify-center select-none overflow-hidden border-b border-white/10">
-                
-                <!-- Close Button -->
                 <button onclick="closeProjectModal()" class="absolute top-3.5 right-3.5 bg-white/10 hover:bg-rose-600 text-white w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer z-30 border border-white/15 backdrop-blur-xl shadow-lg">
                     <i class="fas fa-times text-xs"></i>
                 </button>
 
-                <!-- Slide Counter Badge -->
                 <div id="modalCounter" class="absolute top-3.5 left-3.5 bg-black/75 border border-amber-400/30 text-amber-300 text-[11px] font-mono font-bold px-3 py-1 rounded-full z-20 backdrop-blur-xl shadow-sm">
                     01 / 01
                 </div>
 
-                <!-- ইউজার প্যানেল এবং এডমিন প্যানেল ছবি দেখার লাক্সারি ট্যাব সুইচার -->
                 <div class="w-full bg-[#060a14] border-b border-white/5 px-4 pt-3.5 pb-2.5 flex justify-center gap-2.5 z-20">
                     <button id="tabUserBtn" onclick="switchGalleryTab('user')" class="px-5 py-2 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-2 cursor-pointer">
                         <i class="fas fa-mobile-screen"></i> ইউজার প্যানেল
@@ -303,11 +291,9 @@
                     </button>
                 </div>
 
-                <!-- Main Full Image Area -->
                 <div id="sliderTouchArea" class="w-full h-[52vh] sm:h-[470px] flex items-center justify-center p-3 sm:p-4 relative bg-[#02050b]">
                     <img id="modalImg" src="" alt="Project Preview" class="w-full h-full object-contain transition-all duration-300 drop-shadow-[0_15px_30px_rgba(0,0,0,0.9)]">
                     
-                    <!-- Left & Right Arrow Buttons -->
                     <button onclick="prevSlide(event)" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-amber-400 hover:text-black text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 border border-white/15 backdrop-blur-xl z-20 shadow-xl cursor-pointer">
                         <i class="fas fa-chevron-left text-xs"></i>
                     </button>
@@ -315,7 +301,6 @@
                         <i class="fas fa-chevron-right text-xs"></i>
                     </button>
 
-                    <!-- নো ইমেজ নোটিশ -->
                     <div id="noImgNotice" class="hidden flex-col items-center justify-center text-slate-400 text-xs py-16 text-center px-4">
                         <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center mb-3 text-amber-400 text-xl shadow-lg">
                             <i class="fas fa-lock"></i>
@@ -325,14 +310,11 @@
                     </div>
                 </div>
 
-                <!-- Thumbnails Bar -->
                 <div id="thumbStrip" class="w-full bg-[#04060e] px-4 py-2.5 flex items-center justify-center gap-2.5 overflow-x-auto hide-scrollbar z-20 border-t border-white/5"></div>
             </div>
 
             <!-- Content Details Area -->
             <div class="p-5 sm:p-6 space-y-4 overflow-y-auto flex-1 bg-[#080d19]">
-                
-                <!-- Category Badge & Project Title -->
                 <div>
                     <span id="modalBadge" class="text-[10px] sm:text-xs uppercase tracking-widest font-black px-3.5 py-1 rounded-full bg-gradient-to-r from-amber-500/20 to-yellow-500/10 border border-amber-400/40 text-amber-300 inline-block mb-2 font-mono">
                         CATEGORY
@@ -342,23 +324,19 @@
                     </h2>
                 </div>
 
-                <!-- Dynamic Dual Price Box (BDT & USD) -->
                 <div class="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-r from-[#0d1424] via-[#111a30] to-[#0d1424] p-4 grid grid-cols-2 gap-3 items-center shadow-xl">
                     <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
                     
-                    <!-- BDT -->
                     <div class="border-r border-white/10 pr-2">
-                        <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-widest font-mono">মূল্য (বাংলাদেশী টাকা)</span>
+                        <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-widest font-mono">मूल্য (বাংলাদেশী টাকা)</span>
                         <span id="priceBDT" class="text-xl sm:text-2xl font-black text-amber-400 block mt-1 font-['Outfit']">৳0</span>
                     </div>
-                    <!-- USD -->
                     <div class="pl-2 text-right">
-                        <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-widest font-mono">Price (USD Dollars)</span>
+                        <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-widest font-mono">मूल্য (ইউএস ডলার)</span>
                         <span id="priceUSD" class="text-xl sm:text-2xl font-black text-sky-400 block mt-1 font-['Outfit']">$0</span>
                     </div>
                 </div>
 
-                <!-- Description Box -->
                 <div class="bg-black/30 p-4 rounded-2xl border border-white/5">
                     <h4 class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-2 flex items-center gap-1.5 font-mono">
                         <i class="fas fa-align-left text-amber-400"></i> সম্পূর্ণ প্রজেক্ট ডেসক্রিপশন
@@ -366,7 +344,6 @@
                     <p id="modalDesc" class="text-xs text-slate-300 leading-relaxed whitespace-pre-line font-normal"></p>
                 </div>
 
-                <!-- স্ক্রিনশট সংক্রান্ত নোটিশ -->
                 <div class="flex items-center gap-3 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-400/30 text-amber-200/90 px-4 py-3 rounded-2xl text-xs font-semibold">
                     <div class="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center shrink-0 text-amber-400 text-sm shadow-sm">
                         <i class="fas fa-camera"></i>
@@ -374,12 +351,12 @@
                     <span>যে প্রজেক্টটি নিবেন, সেটির স্ক্রিনশট মেরে অর্ডারের সময় অ্যাডমিনকে ইনবক্সে দিন।</span>
                 </div>
 
-                <!-- Action Buttons -->
+                <!-- Action Buttons: এখানে অর্ডার বাটনে ক্লিক করলে অটোমেটিক টাইপিং হয়ে মেসেজ রেডি হবে -->
                 <div class="grid grid-cols-2 gap-3 pt-2 pb-2">
                     <a id="btnDemo" href="#" target="_blank" class="bg-white/5 hover:bg-white/10 text-slate-200 border border-white/15 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition text-center flex items-center justify-center gap-2 hover:border-white/30 cursor-pointer shadow-md">
                         <i class="fas fa-arrow-up-right-from-square text-[11px] text-sky-400"></i> লাইভ ডেমো
                     </a>
-                    <a id="btnOrder" href="#" target="_blank" class="bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 py-3.5 rounded-xl font-black text-xs uppercase tracking-wider transition text-center flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.3)] cursor-pointer">
+                    <a id="btnOrder" href="#" target="_blank" onclick="handleOrderClick(event)" class="bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 py-3.5 rounded-xl font-black text-xs uppercase tracking-wider transition text-center flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.3)] cursor-pointer">
                         <i class="fab fa-telegram-plane text-sm"></i> অর্ডার করুন
                     </a>
                 </div>
@@ -393,12 +370,11 @@
         <p class="tracking-widest uppercase">&copy; 2026 PROJECT STORE • ALL RIGHTS RESERVED • CRAFTED WITH PRIDE</p>
     </footer>
 
-    <!-- Firebase Realtime Database SDK Modules, Telegram Auto Registration & Live Notice Receiver -->
+    <!-- Firebase Realtime Database SDK Modules -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue, get, set, update, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // ফায়ারবেস কনফিগারেশন
         const firebaseConfig = {
             apiKey: "AIzaSyCCni2iot1qvvaSIt2Xh79rjucIhctczdI",
             authDomain: "digital-project-store-e8ea7.firebaseapp.com",
@@ -415,6 +391,7 @@
 
         window.firebaseDatabase = {};
         window.activeUserId = null;
+        window.currentBuyerInfo = null;
 
         // টেলিগ্রাম ইউজার অটো-রেজিস্ট্রেশন ও লগইন হ্যান্ডলার
         function handleTelegramAutoAuth() {
@@ -440,6 +417,8 @@
                             isPremium: user.is_premium || false
                         };
 
+                        window.currentBuyerInfo = user.username ? `@${user.username}` : `${user.first_name || ''} (ID: ${user.id})`;
+
                         const statusElem = document.getElementById('userStatusText');
                         if (statusElem) {
                             statusElem.innerText = user.username ? `@${user.username}` : `TG: ${user.first_name || user.id}`;
@@ -447,7 +426,6 @@
                     }
                 }
 
-                // যদি টেলিগ্রাম ছাড়া কোনো সাধারণ ব্রাউজার থেকে ভিজিট করা হয়
                 if (!userId) {
                     let localGuestId = localStorage.getItem('ps_user_id');
                     if (!localGuestId) {
@@ -463,6 +441,7 @@
                         languageCode: 'bn',
                         isPremium: false
                     };
+                    window.currentBuyerInfo = `Guest #${userId.slice(-4)}`;
                 }
 
                 window.activeUserId = userId;
@@ -471,7 +450,6 @@
                 get(userRef).then((snapshot) => {
                     const nowTime = new Date().toISOString();
                     if (!snapshot.exists()) {
-                        // নতুন ইউজারের অটো রেজিস্ট্রেশন ও প্রাথমিক অ্যাড ভিউ সেট
                         set(userRef, {
                             ...userData,
                             adViews: 0,
@@ -481,7 +459,6 @@
                             isBlocked: false
                         });
                     } else {
-                        // পুরাতন ইউজারের অ্যাক্টিভ টাইম ও প্রোফাইল আপডেট
                         update(userRef, {
                             ...(userData.firstName ? { firstName: userData.firstName } : {}),
                             ...(userData.lastName ? { lastName: userData.lastName } : {}),
@@ -498,7 +475,6 @@
             }
         }
 
-        // মনিট্যাগ অ্যাড ভিউ রিয়েলটাইমে ফায়ারবেসে রেকর্ড ও যোগ করার ফাংশন
         window.recordMonetagAdView = async function() {
             try {
                 let uid = window.activeUserId;
@@ -517,7 +493,6 @@
             }
         };
 
-        // রিয়েল-টাইম ডাটা লোডার
         function listenToProjects() {
             const grid = document.getElementById('projectsGrid');
             const projectsRef = ref(db, 'portfolio_projects');
@@ -540,34 +515,28 @@
 
                     const thumbImage = item.thumb || (item.images && item.images.length > 0 ? item.images[0] : 'https://via.placeholder.com/400x300/060b17/ffffff?text=VIP+Preview');
 
-                    // বাংলা টাকা এবং ইউএস ডলার ফরম্যাটিং
                     let cleanBDT = (item.priceBDT || '0').toString().trim().replace(/^[৳\s]+/, '').replace(/bdt/i, '').trim();
                     let cleanUSD = (item.priceUSD || '0').toString().trim().replace(/^[\$\s]+/, '').replace(/usd/i, '').trim();
 
                     grid.innerHTML += `
                         <div class="group luxe-card rounded-2xl p-2.5 sm:p-3 flex flex-col justify-between relative overflow-hidden">
-                            <!-- Shimmer Top Bar -->
                             <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-400/30 to-transparent group-hover:via-amber-400 transition-all duration-500"></div>
 
                             <div>
-                                <!-- Image Frame with Luxury Overlay -->
                                 <div class="w-full aspect-[4/3] bg-black/60 rounded-xl overflow-hidden mb-2.5 relative border border-white/5">
                                     <img src="${thumbImage}" alt="${item.title || 'Project'}" onerror="this.src='https://via.placeholder.com/400x300/060b17/ffffff?text=Image+Unavailable'" class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out">
                                     
                                     <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent pointer-events-none"></div>
 
-                                    <!-- Category Pill -->
                                     <span class="absolute top-2 left-2 bg-black/75 backdrop-blur-md border border-white/10 text-amber-300 text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider font-mono shadow-sm">
                                         ${item.badge || 'VIP'}
                                     </span>
                                 </div>
 
-                                <!-- Project Title -->
                                 <h3 class="text-xs sm:text-sm font-bold text-slate-100 group-hover:text-amber-300 transition-colors leading-snug line-clamp-2 mb-2 px-0.5 font-['Outfit']">
                                     ${item.title || 'Untitled Project'}
                                 </h3>
                                 
-                                <!-- Dual Price Tag (BDT & USD) -->
                                 <div class="flex items-center justify-between bg-black/50 border border-white/5 rounded-xl px-2.5 py-2 mb-3">
                                     <div class="flex items-center gap-1 font-black text-amber-400 text-xs sm:text-sm font-['Outfit']">
                                         <span class="text-xs">৳</span>
@@ -580,7 +549,6 @@
                                 </div>
                             </div>
 
-                            <!-- Button with Hover Glow -->
                             <button onclick="handleViewProjectWithAd('${id}')" class="w-full bg-white/5 hover:bg-gradient-to-r hover:from-amber-400 hover:to-amber-500 text-slate-200 hover:text-slate-950 py-2 sm:py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 border border-white/10 hover:border-transparent hover:shadow-[0_0_20px_rgba(245,158,11,0.35)] cursor-pointer">
                                 <span>বিস্তারিত দেখুন</span>
                                 <i class="fas fa-chevron-right text-[10px]"></i>
@@ -594,7 +562,6 @@
             });
         }
 
-        // এডমিন প্যানেল থেকে রিয়েল-টাইম নোটিশ রিসিভার ও ডিসপ্লে কন্ট্রোলার
         function listenToRealtimeNotice() {
             const noticeRef = ref(db, 'site_notice');
             onValue(noticeRef, (snapshot) => {
@@ -603,29 +570,26 @@
                 const titleEl = document.getElementById('noticeModalTitle');
                 const descEl = document.getElementById('noticeModalDesc');
 
-                // যদি এডমিন প্যানেল থেকে নোটিশ পাবলিশ করা থাকে এবং Active থাকে
                 if (notice && notice.isActive !== false && notice.title) {
                     if (titleEl) titleEl.innerText = notice.title;
                     if (descEl) descEl.innerText = notice.message || '';
                     if (modal) modal.classList.remove('hidden');
                 } else {
-                    // নোটিশ বন্ধ বা ডিলিট থাকলে ইউজারদের কাছে শো করবে না
                     if (modal) modal.classList.add('hidden');
                 }
             });
         }
 
-        // ইনিশিয়ালাইজেশন
         handleTelegramAutoAuth();
         listenToProjects();
         listenToRealtimeNotice();
     </script>
 
-    <!-- Modal Slider, Auto Notice & Monetag Ad Handler Controllers -->
+    <!-- Modal Slider, Auto Notice & Order Pre-filled Controller -->
     <script>
         let currentProject = null;
         let currentImgIdx = 0;
-        let currentTab = 'user'; // 'user' or 'admin'
+        let currentTab = 'user';
         let userImagesList = [];
         let adminImagesList = [];
         let activeImagesList = [];
@@ -637,37 +601,86 @@
             }
         }
 
-        // Monetag অ্যাড দেখিয়ে ডাটাবেজে ভিউ রেকর্ড করে পরবর্তী ধাপে নেওয়ার ফাংশন
         function handleViewProjectWithAd(id) {
             if (typeof window.show_11904237 === 'function') {
                 try {
                     const adPromise = window.show_11904237();
                     if (adPromise && typeof adPromise.then === 'function') {
                         adPromise.then(() => {
-                            if (typeof window.recordMonetagAdView === 'function') {
-                                window.recordMonetagAdView();
-                            }
+                            if (typeof window.recordMonetagAdView === 'function') window.recordMonetagAdView();
                             openProjectModal(id);
                         }).catch(() => {
-                            if (typeof window.recordMonetagAdView === 'function') {
-                                window.recordMonetagAdView();
-                            }
+                            if (typeof window.recordMonetagAdView === 'function') window.recordMonetagAdView();
                             openProjectModal(id);
                         });
                     } else {
-                        if (typeof window.recordMonetagAdView === 'function') {
-                            window.recordMonetagAdView();
-                        }
+                        if (typeof window.recordMonetagAdView === 'function') window.recordMonetagAdView();
                         openProjectModal(id);
                     }
                 } catch (e) {
-                    if (typeof window.recordMonetagAdView === 'function') {
-                        window.recordMonetagAdView();
-                    }
+                    if (typeof window.recordMonetagAdView === 'function') window.recordMonetagAdView();
                     openProjectModal(id);
                 }
             } else {
                 openProjectModal(id);
+            }
+        }
+
+        // টেলিগ্রাম ইউজারনেম অনুযায়ী প্রি-ফিল্ড মেসেজ লিংক তৈরি করার ফাংশন
+        function generateTelegramOrderLink(rawTgUrl, projectData) {
+            if (!rawTgUrl && !projectData) return '#';
+            
+            let url = (rawTgUrl || '').trim();
+            let username = '';
+
+            // ইউজারনেম ফিল্টার ও এক্সট্র্যাক্ট করা
+            const match = url.match(/(?:https?:\/\/)?(?:www\.)?t\.me\/([a-zA-Z0-9_]+)/i);
+            if (match && match[1] && match[1].toLowerCase() !== 'share') {
+                username = match[1];
+            } else if (/^@?[a-zA-Z0-9_]{3,}$/.test(url)) {
+                username = url.replace(/^@/, '');
+            }
+
+            // মূল্য ফরম্যাটিং
+            let bdt = (projectData.priceBDT || '0').toString().trim().replace(/^[৳\s]+/, '').replace(/bdt/i, '').trim();
+            let usd = (projectData.priceUSD || '0').toString().trim().replace(/^[\$\s]+/, '').replace(/usd/i, '').trim();
+
+            let buyer = window.currentBuyerInfo || (window.activeUserId ? `ID: ${window.activeUserId}` : 'Website Visitor');
+
+            // অটো-টাইপ মেসেজ টেমপ্লেট
+            let autoMessage = 
+`👋 হ্যালো অ্যাডমিন, আমি এই প্রজেক্টটি অর্ডার করতে চাই:
+
+📌 প্রজেক্টের নাম: ${projectData.title || 'N/A'}
+🏷️ ক্যাটাগরি: ${projectData.badge || 'VIP'}
+💰 মূল্য: ৳${bdt} / $${usd}
+${projectData.demoUrl ? `🔗 ডেমো লিংক: ${projectData.demoUrl}\n` : ''}👤 ক্লায়েন্ট: ${buyer}
+
+আমি বিস্তারিত আলোচনা করে দ্রুত পেমেন্ট ও ডেলিভারি কনফার্ম করতে চাই। ধন্যবাদ!`;
+
+            // টেলিগ্রাম লিঙ্ক বিল্ড করা
+            if (username) {
+                return `https://t.me/${username}?text=${encodeURIComponent(autoMessage)}`;
+            } else if (url) {
+                const sep = url.includes('?') ? '&' : '?';
+                return `${url}${sep}text=${encodeURIComponent(autoMessage)}`;
+            }
+            return '#';
+        }
+
+        // অর্ডার বাটনে ক্লিক হ্যান্ডলার (টেলিগ্রাম অ্যাপ বা ব্রাউজারে ডিরেক্ট স্মুথ ওপেন)
+        function handleOrderClick(event) {
+            const targetUrl = event.currentTarget.getAttribute('href');
+            if (!targetUrl || targetUrl === '#') return;
+
+            // যদি টেলিগ্রাম মিনি অ্যাপের ভেতর থাকে, তবে নেটিভভাবে চ্যাট উইন্ডো খুলে দিবে
+            if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.openTelegramLink === 'function') {
+                try {
+                    event.preventDefault();
+                    window.Telegram.WebApp.openTelegramLink(targetUrl);
+                } catch(e) {
+                    // ব্রাউজারের ডিফল্ট নেভিগেশনে চলে যাবে
+                }
             }
         }
 
@@ -683,7 +696,6 @@
             document.getElementById('modalBadge').innerText = data.badge || 'Project';
             document.getElementById('modalDesc').innerText = data.desc || 'কোনো বিবরণ নেই';
             
-            // মূল্য ফরম্যাটিং (৳ এবং $ সিম্বলসহ)
             let bdt = (data.priceBDT || '0').toString().trim().replace(/^[৳\s]+/, '').replace(/bdt/i, '').trim();
             let usd = (data.priceUSD || '0').toString().trim().replace(/^[\$\s]+/, '').replace(/usd/i, '').trim();
 
@@ -691,17 +703,17 @@
             document.getElementById('priceUSD').innerText = '$ ' + usd;
             
             document.getElementById('btnDemo').href = data.demoUrl || '#';
-            document.getElementById('btnOrder').href = data.telegramUrl || '#';
+            
+            // অটো টাইপিং সহ টেলিগ্রাম লিংক সেট করা
+            const autoOrderLink = generateTelegramOrderLink(data.telegramUrl, data);
+            document.getElementById('btnOrder').href = autoOrderLink;
 
-            // ইউজার ছবি প্রস্তুত করা
             let allImages = Array.isArray(data.images) ? [...data.images] : [];
             if (data.thumb && !allImages.includes(data.thumb)) {
                 allImages = [data.thumb, ...allImages];
             }
 
             userImagesList = (data.userImages && data.userImages.length) ? data.userImages : allImages;
-            
-            // এডমিন ছবি শুধুমাত্র তখনই দেখাবে যখন ডাটাবেজে adminImages থাকবে
             adminImagesList = (data.adminImages && Array.isArray(data.adminImages)) ? data.adminImages : [];
 
             switchGalleryTab('user');
@@ -715,7 +727,6 @@
             document.body.style.overflow = 'auto';
         }
 
-        // ইউজার প্যানেল ও এডমিন প্যানেল ট্যাব সুইচ ফাংশন
         function switchGalleryTab(tab) {
             currentTab = tab;
             currentImgIdx = 0;
@@ -756,7 +767,6 @@
             highlightActiveThumb();
         }
 
-        // থাম্বনেইল বার
         function renderThumbStrip() {
             const strip = document.getElementById('thumbStrip');
             strip.innerHTML = '';
@@ -810,7 +820,6 @@
             renderSlide();
         }
 
-        // ফোনে সোয়াইপ ফিচার
         let touchstartX = 0;
         let touchendX = 0;
         const sliderArea = document.getElementById('sliderTouchArea');
