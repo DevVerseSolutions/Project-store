@@ -228,7 +228,7 @@
         <div class="flex items-center justify-center gap-3 sm:gap-6 mt-6 text-[11px] font-semibold text-slate-400">
             <div class="flex items-center gap-1.5"><i class="fas fa-bolt text-amber-400"></i> ইনস্ট্যান্ট ডেমো</div>
             <div class="w-1 h-1 rounded-full bg-slate-700"></div>
-            <div class="flex items-center gap-1.5"><i class="fas fa-shield-check text-emerald-400"></i> ১০০% সিকিউরিটি কোড</div>
+            <div class="flex items-center gap-1.5"><i class="fas fa-shield-check text-emerald-400"></i> ১০০% বাগ-ফ্রি কোড</div>
             <div class="w-1 h-1 rounded-full bg-slate-700"></div>
             <div class="flex items-center gap-1.5"><i class="fas fa-headset text-sky-400"></i> ২৪/৭ এডমিন সাপোর্ট</div>
         </div>
@@ -396,7 +396,7 @@
     <!-- Firebase Realtime Database SDK Modules, Telegram Auto Registration & Live Notice Receiver -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, onValue, get, set, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, onValue, get, set, update, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         // ফায়ারবেস কনফিগারেশন
         const firebaseConfig = {
@@ -414,10 +414,14 @@
         const db = getDatabase(app);
 
         window.firebaseDatabase = {};
+        window.activeUserId = null;
 
         // টেলিগ্রাম ইউজার অটো-রেজিস্ট্রেশন ও লগইন হ্যান্ডলার
         function handleTelegramAutoAuth() {
             try {
+                let userId = null;
+                let userData = null;
+
                 if (window.Telegram && window.Telegram.WebApp) {
                     const tg = window.Telegram.WebApp;
                     tg.ready();
@@ -426,47 +430,92 @@
                     const user = tg.initDataUnsafe?.user;
 
                     if (user && user.id) {
-                        const userRef = ref(db, 'users/' + user.id);
+                        userId = String(user.id);
+                        userData = {
+                            telegramId: user.id,
+                            firstName: user.first_name || '',
+                            lastName: user.last_name || '',
+                            username: user.username || '',
+                            languageCode: user.language_code || 'en',
+                            isPremium: user.is_premium || false
+                        };
 
-                        get(userRef).then((snapshot) => {
-                            const nowTime = new Date().toISOString();
-                            if (!snapshot.exists()) {
-                                // নতুন ইউজারের অটো রেজিস্ট্রেশন
-                                set(userRef, {
-                                    telegramId: user.id,
-                                    firstName: user.first_name || '',
-                                    lastName: user.last_name || '',
-                                    username: user.username || '',
-                                    languageCode: user.language_code || 'en',
-                                    isPremium: user.is_premium || false,
-                                    registeredAt: nowTime,
-                                    lastActive: nowTime,
-                                    role: 'user'
-                                });
-                            } else {
-                                // পুরাতন ইউজারের অ্যাক্টিভ টাইম ও প্রোফাইল আপডেট
-                                update(userRef, {
-                                    firstName: user.first_name || '',
-                                    lastName: user.last_name || '',
-                                    username: user.username || '',
-                                    lastActive: nowTime
-                                });
-                            }
-                        }).catch((err) => {
-                            console.log("Auto-registration sync issue:", err);
-                        });
-
-                        // UI ব্যাজে টেলিগ্রাম নাম বা আইডি ডাইনামিকালি প্রদর্শন
                         const statusElem = document.getElementById('userStatusText');
                         if (statusElem) {
                             statusElem.innerText = user.username ? `@${user.username}` : `TG: ${user.first_name || user.id}`;
                         }
                     }
                 }
+
+                // যদি টেলিগ্রাম ছাড়া কোনো সাধারণ ব্রাউজার থেকে ভিজিট করা হয়
+                if (!userId) {
+                    let localGuestId = localStorage.getItem('ps_user_id');
+                    if (!localGuestId) {
+                        localGuestId = String(Math.floor(10000000 + Math.random() * 90000000));
+                        localStorage.setItem('ps_user_id', localGuestId);
+                    }
+                    userId = localGuestId;
+                    userData = {
+                        telegramId: Number(userId),
+                        firstName: "Guest",
+                        lastName: "User " + userId.slice(-3),
+                        username: "guest_" + userId,
+                        languageCode: 'bn',
+                        isPremium: false
+                    };
+                }
+
+                window.activeUserId = userId;
+                const userRef = ref(db, 'users/' + userId);
+
+                get(userRef).then((snapshot) => {
+                    const nowTime = new Date().toISOString();
+                    if (!snapshot.exists()) {
+                        // নতুন ইউজারের অটো রেজিস্ট্রেশন ও প্রাথমিক অ্যাড ভিউ সেট
+                        set(userRef, {
+                            ...userData,
+                            adViews: 0,
+                            registeredAt: nowTime,
+                            lastActive: nowTime,
+                            role: 'user',
+                            isBlocked: false
+                        });
+                    } else {
+                        // পুরাতন ইউজারের অ্যাক্টিভ টাইম ও প্রোফাইল আপডেট
+                        update(userRef, {
+                            ...(userData.firstName ? { firstName: userData.firstName } : {}),
+                            ...(userData.lastName ? { lastName: userData.lastName } : {}),
+                            ...(userData.username ? { username: userData.username } : {}),
+                            lastActive: nowTime
+                        });
+                    }
+                }).catch((err) => {
+                    console.log("Auto-registration sync issue:", err);
+                });
+
             } catch (err) {
                 console.log("Telegram WebApp not detected or running in standard browser.");
             }
         }
+
+        // মনিট্যাগ অ্যাড ভিউ রিয়েলটাইমে ফায়ারবেসে রেকর্ড ও যোগ করার ফাংশন
+        window.recordMonetagAdView = async function() {
+            try {
+                let uid = window.activeUserId;
+                if (!uid) {
+                    uid = localStorage.getItem('ps_user_id');
+                }
+                if (!uid) return;
+
+                const userRef = ref(db, 'users/' + uid);
+                await update(userRef, {
+                    adViews: increment(1),
+                    lastActive: new Date().toISOString()
+                });
+            } catch (err) {
+                console.error("Error updating ad view counter:", err);
+            }
+        };
 
         // রিয়েল-টাইম ডাটা লোডার
         function listenToProjects() {
@@ -588,21 +637,33 @@
             }
         }
 
-        // Monetag অ্যাড দেখিয়ে পরবর্তী ধাপে নেওয়ার ফাংশন
+        // Monetag অ্যাড দেখিয়ে ডাটাবেজে ভিউ রেকর্ড করে পরবর্তী ধাপে নেওয়ার ফাংশন
         function handleViewProjectWithAd(id) {
             if (typeof window.show_11904237 === 'function') {
                 try {
                     const adPromise = window.show_11904237();
                     if (adPromise && typeof adPromise.then === 'function') {
                         adPromise.then(() => {
+                            if (typeof window.recordMonetagAdView === 'function') {
+                                window.recordMonetagAdView();
+                            }
                             openProjectModal(id);
                         }).catch(() => {
+                            if (typeof window.recordMonetagAdView === 'function') {
+                                window.recordMonetagAdView();
+                            }
                             openProjectModal(id);
                         });
                     } else {
+                        if (typeof window.recordMonetagAdView === 'function') {
+                            window.recordMonetagAdView();
+                        }
                         openProjectModal(id);
                     }
                 } catch (e) {
+                    if (typeof window.recordMonetagAdView === 'function') {
+                        window.recordMonetagAdView();
+                    }
                     openProjectModal(id);
                 }
             } else {
