@@ -328,11 +328,11 @@
                     <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
                     
                     <div class="border-r border-white/10 pr-2">
-                        <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-widest font-mono">मूल্য (বাংলাদেশী টাকা)</span>
+                        <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-widest font-mono">মূল্য (বাংলাদেশী টাকা)</span>
                         <span id="priceBDT" class="text-xl sm:text-2xl font-black text-amber-400 block mt-1 font-['Outfit']">৳0</span>
                     </div>
                     <div class="pl-2 text-right">
-                        <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-widest font-mono">मूल্য (ইউএস ডলার)</span>
+                        <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-widest font-mono">মূল্য (ইউএস ডলার)</span>
                         <span id="priceUSD" class="text-xl sm:text-2xl font-black text-sky-400 block mt-1 font-['Outfit']">$0</span>
                     </div>
                 </div>
@@ -351,7 +351,7 @@
                     <span>যে প্রজেক্টটি নিবেন, সেটির স্ক্রিনশট মেরে অর্ডারের সময় অ্যাডমিনকে ইনবক্সে দিন।</span>
                 </div>
 
-                <!-- Action Buttons: এখানে অর্ডার বাটনে ক্লিক করলে অটোমেটিক টাইপিং হয়ে মেসেজ রেডি হবে -->
+                <!-- Action Buttons: সম্পূর্ণ সুরক্ষিত ও অটো টাইপ সম্পন্ন অর্ডার বাটন -->
                 <div class="grid grid-cols-2 gap-3 pt-2 pb-2">
                     <a id="btnDemo" href="#" target="_blank" class="bg-white/5 hover:bg-white/10 text-slate-200 border border-white/15 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition text-center flex items-center justify-center gap-2 hover:border-white/30 cursor-pointer shadow-md">
                         <i class="fas fa-arrow-up-right-from-square text-[11px] text-sky-400"></i> লাইভ ডেমো
@@ -626,11 +626,11 @@
             }
         }
 
-        // টেলিগ্রাম ইউজারনেম অনুযায়ী প্রি-ফিল্ড মেসেজ লিংক তৈরি করার ফাংশন
+        // টেলিগ্রাম ইউজারনেম অনুযায়ী প্রি-ফিল্ড মেসেজ লিংক তৈরি করার ফাংশন (পিকচার এবং ওয়েবসাইট সহ)
         function generateTelegramOrderLink(rawTgUrl, projectData) {
             if (!rawTgUrl && !projectData) return '#';
             
-            let url = (rawTgUrl || '').trim();
+            let url = (rawTgUrl || projectData.telegramUrl || '').trim();
             let username = '';
 
             // ইউজারনেম ফিল্টার ও এক্সট্র্যাক্ট করা
@@ -647,14 +647,23 @@
 
             let buyer = window.currentBuyerInfo || (window.activeUserId ? `ID: ${window.activeUserId}` : 'Website Visitor');
 
-            // অটো-টাইপ মেসেজ টেমপ্লেট
+            // প্রজেক্টের ছবি/পিকচার লিংক বের করা (বট ও ওয়েবসাইট উভয়ের জন্য)
+            let projectPic = projectData.thumb || 
+                             (projectData.images && projectData.images.length > 0 ? projectData.images[0] : '') ||
+                             (projectData.userImages && projectData.userImages.length > 0 ? projectData.userImages[0] : '') ||
+                             '';
+
+            // ওয়েবসাইট বা লাইভ ডেমো লিংক বের করা (বট বা ওয়েবসাইট যে প্রজেক্টই হোক)
+            let liveWebsite = projectData.demoUrl || projectData.websiteUrl || projectData.webUrl || projectData.liveUrl || projectData.website || projectData.url || projectData.link || '';
+
+            // অটো-টাইপ মেসেজ টেমপ্লেট (ছবি এবং ওয়েবসাইট লিঙ্ক সহ নিখুঁত ফরম্যাট)
             let autoMessage = 
 `👋 হ্যালো অ্যাডমিন, আমি এই প্রজেক্টটি অর্ডার করতে চাই:
 
 📌 প্রজেক্টের নাম: ${projectData.title || 'N/A'}
 🏷️ ক্যাটাগরি: ${projectData.badge || 'VIP'}
 💰 মূল্য: ৳${bdt} / $${usd}
-${projectData.demoUrl ? `🔗 ডেমো লিংক: ${projectData.demoUrl}\n` : ''}👤 ক্লায়েন্ট: ${buyer}
+${liveWebsite ? `🌐 ওয়েবসাইট / ডেমো: ${liveWebsite}\n` : ''}${projectPic ? `🖼️ প্রজেক্টের ছবি: ${projectPic}\n` : ''}👤 ক্লায়েন্ট: ${buyer}
 
 আমি বিস্তারিত আলোচনা করে দ্রুত পেমেন্ট ও ডেলিভারি কনফার্ম করতে চাই। ধন্যবাদ!`;
 
@@ -668,19 +677,16 @@ ${projectData.demoUrl ? `🔗 ডেমো লিংক: ${projectData.demoUrl}\
             return '#';
         }
 
-        // অর্ডার বাটনে ক্লিক হ্যান্ডলার (টেলিগ্রাম অ্যাপ বা ব্রাউজারে ডিরেক্ট স্মুথ ওপেন)
+        // অর্ডার বাটনে ক্লিক হ্যান্ডলার
         function handleOrderClick(event) {
             const targetUrl = event.currentTarget.getAttribute('href');
             if (!targetUrl || targetUrl === '#') return;
 
-            // যদি টেলিগ্রাম মিনি অ্যাপের ভেতর থাকে, তবে নেটিভভাবে চ্যাট উইন্ডো খুলে দিবে
             if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.openTelegramLink === 'function') {
                 try {
                     event.preventDefault();
                     window.Telegram.WebApp.openTelegramLink(targetUrl);
-                } catch(e) {
-                    // ব্রাউজারের ডিফল্ট নেভিগেশনে চলে যাবে
-                }
+                } catch(e) {}
             }
         }
 
@@ -704,7 +710,7 @@ ${projectData.demoUrl ? `🔗 ডেমো লিংক: ${projectData.demoUrl}\
             
             document.getElementById('btnDemo').href = data.demoUrl || '#';
             
-            // অটো টাইপিং সহ টেলিগ্রাম লিংক সেট করা
+            // অটো টাইপিং সহ টেলিগ্রাম লিংক সেট করা (পিকচার ও ওয়েবসাইট সহ)
             const autoOrderLink = generateTelegramOrderLink(data.telegramUrl, data);
             document.getElementById('btnOrder').href = autoOrderLink;
 
