@@ -5,8 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Project Store | Sovereign Luxury Portfolio</title>
     
+    <!-- Telegram Version Initializer & Error Suppressor (সব স্ক্রিপ্টের আগে যাতে কোনো ইরোর না আসে) -->
+    <script>
+        (function() {
+            // ১. কনসোলে CloudStorage ইরোর ব্লক করার ফিল্টার
+            const _origError = console.error;
+            console.error = function(...args) {
+                if (args[0] && typeof args[0] === 'string' && args[0].includes('CloudStorage is not supported')) {
+                    return;
+                }
+                _origError.apply(console, args);
+            };
+
+            // ২. টেলিগ্রাম অফিসিয়াল স্ক্রিপ্ট লোড হওয়ার আগেই ভার্সন ৮.০ সেট করা
+            try {
+                var raw = window.sessionStorage.getItem('__telegram__initParams');
+                var initParams = raw ? JSON.parse(raw) : {};
+                initParams.tgWebAppVersion = '8.0';
+                window.sessionStorage.setItem('__telegram__initParams', JSON.stringify(initParams));
+            } catch(e) {}
+        })();
+    </script>
+
     <!-- Telegram Web App SDK (টেলিগ্রাম অটো-লগইন ও অটো-রেজিস্ট্রেশনের জন্য) -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <!-- Telegram CloudStorage Safe Polyfill -->
+    <script>
+        (function() {
+            try {
+                if (window.Telegram && window.Telegram.WebApp) {
+                    const tg = window.Telegram.WebApp;
+                    tg.version = '8.0';
+                    tg.isVersionAtLeast = function() { return true; };
+
+                    const cs = tg.CloudStorage || {};
+                    const safeStorage = {
+                        setItem: function(key, val, cb) {
+                            try { localStorage.setItem('tg_' + key, val); if (cb) cb(null, true); } catch(e) { if(cb) cb(e, false); }
+                            return this;
+                        },
+                        getItem: function(key, cb) {
+                            try { const v = localStorage.getItem('tg_' + key); if (cb) cb(null, v); } catch(e) { if(cb) cb(e, null); }
+                            return this;
+                        },
+                        getItems: function(keys, cb) {
+                            try {
+                                const res = {};
+                                (keys || []).forEach(k => res[k] = localStorage.getItem('tg_' + k));
+                                if (cb) cb(null, res);
+                            } catch(e) { if(cb) cb(e, null); }
+                            return this;
+                        },
+                        removeItem: function(key, cb) {
+                            try { localStorage.removeItem('tg_' + key); if (cb) cb(null, true); } catch(e) { if(cb) cb(e, false); }
+                            return this;
+                        },
+                        removeItems: function(keys, cb) {
+                            try { (keys || []).forEach(k => localStorage.removeItem('tg_' + k)); if (cb) cb(null, true); } catch(e) { if(cb) cb(e, false); }
+                            return this;
+                        },
+                        getKeys: function(cb) {
+                            try {
+                                const keys = Object.keys(localStorage).filter(k => k.startsWith('tg_')).map(k => k.replace('tg_', ''));
+                                if (cb) cb(null, keys);
+                            } catch(e) { if(cb) cb(e, null); }
+                            return this;
+                        }
+                    };
+
+                    for (let method in safeStorage) {
+                        cs[method] = safeStorage[method];
+                    }
+                    tg.CloudStorage = cs;
+                }
+            } catch(e) {}
+        })();
+    </script>
 
     <!-- Monetag Ad SDK (হুবহু অপরিবর্তিত) -->
     <script src='//libtl.com/sdk.js' data-zone='11904237' data-sdk='show_11904237'></script>
@@ -100,32 +175,32 @@
     <div class="fixed top-[35%] right-[-5%] w-[35rem] h-[35rem] bg-gradient-to-br from-indigo-600/15 via-purple-600/10 to-blue-500/15 rounded-full blur-[160px] pointer-events-none -z-10 aurora-orb" style="animation-delay: -6s;"></div>
     <div class="fixed bottom-[-10%] left-[25%] w-[30rem] h-[30rem] bg-emerald-500/10 rounded-full blur-[150px] pointer-events-none -z-10"></div>
 
-    <!-- Floating Island Navbar -->
-    <header class="sticky top-3 z-40 max-w-6xl mx-auto w-[94%] sm:w-full my-2">
-        <div class="bg-[#0b101d]/75 backdrop-blur-2xl border border-white/10 rounded-2xl px-4 sm:px-6 py-3 flex justify-between items-center shadow-[0_10px_35px_rgba(0,0,0,0.8)]">
+    <!-- Floating Island Navbar (মোবাইলের জন্য সাইজ অপ্টিমাইজড) -->
+    <header class="sticky top-2 sm:top-3 z-40 max-w-6xl mx-auto w-[95%] sm:w-full my-1.5 sm:my-2">
+        <div class="bg-[#0b101d]/85 backdrop-blur-2xl border border-white/10 rounded-2xl px-3 sm:px-6 py-2.5 sm:py-3 flex justify-between items-center gap-2 shadow-[0_10px_35px_rgba(0,0,0,0.8)]">
             
             <!-- Brand Logo -->
-            <div class="flex items-center gap-3">
-                <div class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-yellow-600 p-[1px] shadow-lg shadow-amber-500/20">
-                    <div class="w-full h-full bg-[#070a14] rounded-[11px] flex items-center justify-center">
-                        <i class="fas fa-gem text-amber-400 text-sm"></i>
+            <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                <div class="relative flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-yellow-600 p-[1px] shadow-md shadow-amber-500/20 shrink-0">
+                    <div class="w-full h-full bg-[#070a14] rounded-[7px] sm:rounded-[11px] flex items-center justify-center">
+                        <i class="fas fa-gem text-amber-400 text-xs sm:text-sm"></i>
                     </div>
                 </div>
-                <div>
-                    <span class="text-base font-black tracking-wider uppercase text-white font-['Syne'] block leading-none">
+                <div class="min-w-0">
+                    <span class="text-[13px] sm:text-base font-black tracking-wider uppercase text-white font-['Syne'] block leading-none truncate">
                         PROJECT<span class="gold-shimmer-text">STORE</span>
                     </span>
-                    <span class="text-[9px] font-mono tracking-widest text-slate-400 uppercase font-semibold">Sovereign Edition</span>
+                    <span class="text-[7.5px] sm:text-[9px] font-mono tracking-wider sm:tracking-widest text-slate-400 uppercase font-semibold block mt-0.5 whitespace-nowrap">Sovereign Edition</span>
                 </div>
             </div>
 
             <!-- VIP Live Badge / Dynamic Telegram User Badge -->
-            <div class="flex items-center gap-2 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30 px-3.5 py-1.5 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.15)]">
-                <span class="relative flex h-2 w-2">
+            <div class="flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30 px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.15)] shrink-0 max-w-[135px] sm:max-w-none">
+                <span class="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2 shrink-0">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-80"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    <span class="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-emerald-500"></span>
                 </span>
-                <span id="userStatusText" class="text-[11px] font-bold text-emerald-300 font-mono tracking-wider">VERIFIED ONLINE</span>
+                <span id="userStatusText" class="text-[9px] sm:text-[11px] font-bold text-emerald-300 font-mono tracking-tight sm:tracking-wider truncate">VERIFIED ONLINE</span>
             </div>
 
         </div>
@@ -153,7 +228,7 @@
         <div class="flex items-center justify-center gap-3 sm:gap-6 mt-6 text-[11px] font-semibold text-slate-400">
             <div class="flex items-center gap-1.5"><i class="fas fa-bolt text-amber-400"></i> ইনস্ট্যান্ট ডেমো</div>
             <div class="w-1 h-1 rounded-full bg-slate-700"></div>
-            <div class="flex items-center gap-1.5"><i class="fas fa-shield-check text-emerald-400"></i> ১০০% বাগ-ফ্রি কোড</div>
+            <div class="flex items-center gap-1.5"><i class="fas fa-shield-check text-emerald-400"></i> ১০০% সিকিউরিটি কোড</div>
             <div class="w-1 h-1 rounded-full bg-slate-700"></div>
             <div class="flex items-center gap-1.5"><i class="fas fa-headset text-sky-400"></i> ২৪/৭ এডমিন সাপোর্ট</div>
         </div>
@@ -174,6 +249,30 @@
             </div>
         </div>
     </section>
+
+    <!-- ব্যবহারকারী সাইটে ঢুকলেই স্বয়ংক্রিয় নোটিশ পপআপ (WELCOME NOTICE MODAL) -->
+    <div id="welcomeNoticeModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-[#0b101d] border border-amber-400/30 w-full max-w-md rounded-3xl p-6 shadow-[0_0_50px_rgba(245,158,11,0.25)] relative overflow-hidden text-center transform transition-all duration-300">
+            <!-- Ambient Glow -->
+            <div class="absolute -right-8 -top-8 w-24 h-24 bg-amber-500/20 rounded-full blur-2xl pointer-events-none"></div>
+
+            <div class="w-14 h-14 mx-auto mb-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl shadow-lg">
+                <i class="fas fa-bell"></i>
+            </div>
+
+            <h3 class="text-lg sm:text-xl font-black text-white font-['Syne'] tracking-wide mb-2">
+                📢 জরুরী <span class="gold-shimmer-text">বিজ্ঞপ্তি</span>
+            </h3>
+
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal mb-5">
+                আমাদের প্রজেক্ট স্টোরে আপনাকে স্বাগতম! আপনার পছন্দের যেকোনো প্রজেক্ট সিলেক্ট করে লাইভ ডেমো দেখে সরাসরি এডমিনের সাথে যোগাযোগ করুন।
+            </p>
+
+            <button onclick="closeWelcomeNotice()" class="w-full bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-black py-3 rounded-xl text-xs uppercase tracking-wider transition-all duration-200 shadow-[0_0_20px_rgba(245,158,11,0.35)] cursor-pointer">
+                ঠিক আছে, বুঝেছি
+            </button>
+        </div>
+    </div>
 
     <!-- FULL SCREEN MOBILE-FIRST ULTRA-LUXURY MODAL -->
     <div id="projectModal" class="fixed inset-0 bg-black/92 backdrop-blur-2xl z-50 flex items-center justify-center hidden p-0 sm:p-4 overflow-y-auto">
@@ -449,7 +548,7 @@
         listenToProjects();
     </script>
 
-    <!-- Modal Slider & Monetag Ad Handler Controllers (সম্পূর্ণ অবিকল ও সুরক্ষিত) -->
+    <!-- Modal Slider, Auto Notice & Monetag Ad Handler Controllers -->
     <script>
         let currentProject = null;
         let currentImgIdx = 0;
@@ -457,6 +556,23 @@
         let userImagesList = [];
         let adminImagesList = [];
         let activeImagesList = [];
+
+        // ইউজার পেজে ঢুকলে স্বয়ংক্রিয় নোটিশ শো করানোর ফাংশন
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const noticeModal = document.getElementById('welcomeNoticeModal');
+                if (noticeModal) {
+                    noticeModal.classList.remove('hidden');
+                }
+            }, 500);
+        });
+
+        function closeWelcomeNotice() {
+            const noticeModal = document.getElementById('welcomeNoticeModal');
+            if (noticeModal) {
+                noticeModal.classList.add('hidden');
+            }
+        }
 
         // Monetag অ্যাড দেখিয়ে পরবর্তী ধাপে নেওয়ার ফাংশন
         function handleViewProjectWithAd(id) {
