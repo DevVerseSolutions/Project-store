@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Project Store | Sovereign Luxury Portfolio</title>
     
+    <!-- Telegram Web App SDK (টেলিগ্রাম অটো-লগইন ও অটো-রেজিস্ট্রেশনের জন্য) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
     <!-- Monetag Ad SDK (হুবহু অপরিবর্তিত) -->
     <script src='//libtl.com/sdk.js' data-zone='11904237' data-sdk='show_11904237'></script>
 
@@ -116,13 +119,13 @@
                 </div>
             </div>
 
-            <!-- VIP Live Badge -->
+            <!-- VIP Live Badge / Dynamic Telegram User Badge -->
             <div class="flex items-center gap-2 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30 px-3.5 py-1.5 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.15)]">
                 <span class="relative flex h-2 w-2">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-80"></span>
                     <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
-                <span class="text-[11px] font-bold text-emerald-300 font-mono tracking-wider">Active</span>
+                <span id="userStatusText" class="text-[11px] font-bold text-emerald-300 font-mono tracking-wider">VERIFIED ONLINE</span>
             </div>
 
         </div>
@@ -150,7 +153,7 @@
         <div class="flex items-center justify-center gap-3 sm:gap-6 mt-6 text-[11px] font-semibold text-slate-400">
             <div class="flex items-center gap-1.5"><i class="fas fa-bolt text-amber-400"></i> ইনস্ট্যান্ট ডেমো</div>
             <div class="w-1 h-1 rounded-full bg-slate-700"></div>
-            <div class="flex items-center gap-1.5"><i class="fas fa-shield-check text-emerald-400"></i> ১০০% সিকিউরিটি কোড</div>
+            <div class="flex items-center gap-1.5"><i class="fas fa-shield-check text-emerald-400"></i> ১০০% বাগ-ফ্রি কোড</div>
             <div class="w-1 h-1 rounded-full bg-slate-700"></div>
             <div class="flex items-center gap-1.5"><i class="fas fa-headset text-sky-400"></i> ২৪/৭ এডমিন সাপোর্ট</div>
         </div>
@@ -244,12 +247,12 @@
                     
                     <!-- BDT -->
                     <div class="border-r border-white/10 pr-2">
-                        <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-widest font-mono">মূল্য:-(বাংলাদেশী টাকা)</span>
+                        <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-widest font-mono">মূল্য (বাংলাদেশী টাকা)</span>
                         <span id="priceBDT" class="text-xl sm:text-2xl font-black text-amber-400 block mt-1 font-['Outfit']">৳0</span>
                     </div>
                     <!-- USD -->
                     <div class="pl-2 text-right">
-                        <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-widest font-mono">Price:-(US Dollars)</span>
+                        <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-widest font-mono">মূল্য (ইউএস ডলার)</span>
                         <span id="priceUSD" class="text-xl sm:text-2xl font-black text-sky-400 block mt-1 font-['Outfit']">$0</span>
                     </div>
                 </div>
@@ -267,7 +270,7 @@
                     <div class="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center shrink-0 text-amber-400 text-sm shadow-sm">
                         <i class="fas fa-camera"></i>
                     </div>
-                    <span>আপনার প্রজেক্টটি নিবেন, সেটির স্ক্রিনশট মেরে অর্ডারের সময় অ্যাডমিনকে ইনবক্সে দিন।</span>
+                    <span>যে প্রজেক্টটি নিবেন, সেটির স্ক্রিনশট মেরে অর্ডারের সময় অ্যাডমিনকে ইনবক্সে দিন।</span>
                 </div>
 
                 <!-- Action Buttons -->
@@ -289,10 +292,10 @@
         <p class="tracking-widest uppercase">&copy; 2026 PROJECT STORE • ALL RIGHTS RESERVED • CRAFTED WITH PRIDE</p>
     </footer>
 
-    <!-- Firebase Realtime Database SDK Modules (সম্পূর্ণ অবিকল ও সুরক্ষিত) -->
+    <!-- Firebase Realtime Database SDK Modules & Telegram Auto Registration -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, onValue, get, set, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         // ফায়ারবেস কনফিগারেশন
         const firebaseConfig = {
@@ -310,6 +313,59 @@
         const db = getDatabase(app);
 
         window.firebaseDatabase = {};
+
+        // টেলিগ্রাম ইউজার অটো-রেজিস্ট্রেশন ও লগইন হ্যান্ডলার
+        function handleTelegramAutoAuth() {
+            try {
+                if (window.Telegram && window.Telegram.WebApp) {
+                    const tg = window.Telegram.WebApp;
+                    tg.ready();
+                    tg.expand();
+
+                    const user = tg.initDataUnsafe?.user;
+
+                    if (user && user.id) {
+                        const userRef = ref(db, 'users/' + user.id);
+
+                        get(userRef).then((snapshot) => {
+                            const nowTime = new Date().toISOString();
+                            if (!snapshot.exists()) {
+                                // নতুন ইউজারের অটো রেজিস্ট্রেশন
+                                set(userRef, {
+                                    telegramId: user.id,
+                                    firstName: user.first_name || '',
+                                    lastName: user.last_name || '',
+                                    username: user.username || '',
+                                    languageCode: user.language_code || 'en',
+                                    isPremium: user.is_premium || false,
+                                    registeredAt: nowTime,
+                                    lastActive: nowTime,
+                                    role: 'user'
+                                });
+                            } else {
+                                // পুরাতন ইউজারের অ্যাক্টিভ টাইম ও প্রোফাইল আপডেট
+                                update(userRef, {
+                                    firstName: user.first_name || '',
+                                    lastName: user.last_name || '',
+                                    username: user.username || '',
+                                    lastActive: nowTime
+                                });
+                            }
+                        }).catch((err) => {
+                            console.log("Auto-registration sync issue:", err);
+                        });
+
+                        // UI ব্যাজে টেলিগ্রাম নাম বা আইডি ডাইনামিকালি প্রদর্শন
+                        const statusElem = document.getElementById('userStatusText');
+                        if (statusElem) {
+                            statusElem.innerText = user.username ? `@${user.username}` : `TG: ${user.first_name || user.id}`;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.log("Telegram WebApp not detected or running in standard browser.");
+            }
+        }
 
         // রিয়েল-টাইম ডাটা লোডার
         function listenToProjects() {
@@ -388,6 +444,8 @@
             });
         }
 
+        // ইনিশিয়ালাইজেশন
+        handleTelegramAutoAuth();
         listenToProjects();
     </script>
 
