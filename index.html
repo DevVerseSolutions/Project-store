@@ -903,11 +903,11 @@ ${liveWebsite ? `🌐 লাইভ ডেমো: ${liveWebsite}\n` : ''}${projec
             }
 
             const botUsername = getTargetBotUsername();
-            const botDeepLink = `https://t.me/${botUsername}?startapp=${encodeURIComponent(pid)}`;
+            const botDeepLink = `https://t.me/${project_shop19_bot}?startapp=${encodeURIComponent(pid)}`;
             const projectTitle = (currentProject && currentProject.title) ? currentProject.title : 'প্রজেক্ট';
 
             copyTextToClipboard(botDeepLink).then(() => {
-                showToast("✅ বটের ডাইরেক্ট লিংক কপি হয়েছে!");
+                showToast("✅ কপি হয়েছে!");
                 try {
                     if (window.Telegram?.WebApp?.HapticFeedback) {
                         window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
@@ -918,7 +918,7 @@ ${liveWebsite ? `🌐 লাইভ ডেমো: ${liveWebsite}\n` : ''}${projec
             });
 
             if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.openTelegramLink === 'function') {
-                const tgShareUrl = `https://t.me/share/url?url=${encodeURIComponent(botDeepLink)}&text=${encodeURIComponent('🔥 ' + projectTitle + ' - সরাসরি দেখতে নিচের লিংকে ক্লিক করুন:')}`;
+                const tgShareUrl = `https://t.me/share/url?url=${encodeURIComponent(botDeepLink)}&text=${encodeURIComponent('🔥 ' + projectTitle + ' - সরাসরি ডেমো দেখতে লিংকে ক্লিক করুন:')}`;
                 window.Telegram.WebApp.openTelegramLink(tgShareUrl);
                 return;
             }
@@ -926,7 +926,7 @@ ${liveWebsite ? `🌐 লাইভ ডেমো: ${liveWebsite}\n` : ''}${projec
             if (navigator.share) {
                 navigator.share({
                     title: projectTitle,
-                    text: `🔥 ${projectTitle} প্রজেক্টটি সরাসরি দেখতে লিংকে যান:`,
+                    text: `🔥 ${projectTitle} প্রজেক্টটি সরাসরি ডেমো দেখতে লিংকে যান:`,
                     url: botDeepLink
                 }).catch(() => {});
             }
