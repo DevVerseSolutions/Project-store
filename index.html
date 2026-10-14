@@ -462,6 +462,27 @@
         window.activeUserId = null;
         window.currentBuyerInfo = null;
 
+        // ইউজার কোন প্রজেক্টে ক্লিক করলো তা ডাটাবেজে সংরক্ষণ করার ফাংশন
+        window.recordProjectVisit = function(projectId, projectData) {
+            if (!window.activeUserId || !projectId || !projectData) return;
+            try {
+                const nowTime = Date.now();
+                const visitRef = ref(db, `users/${window.activeUserId}/visitedProjects/${projectId}`);
+                set(visitRef, {
+                    projectId: String(projectId),
+                    title: projectData.title || 'Untitled Project',
+                    badge: projectData.badge || 'VIP',
+                    timestamp: nowTime
+                }).catch(() => {});
+
+                // ইউজারের লাস্ট অ্যাক্টিভ টাইম আপডেট
+                const userRef = ref(db, `users/${window.activeUserId}`);
+                update(userRef, {
+                    lastActive: new Date().toISOString()
+                }).catch(() => {});
+            } catch (e) {}
+        };
+
         function handleTelegramAutoAuth() {
             try {
                 let userId = null;
@@ -788,6 +809,11 @@ ${liveWebsite ? `🌐 লাইভ ডেমো: ${liveWebsite}\n` : ''}${projec
             currentImgIdx = 0;
             currentTab = 'user';
 
+            // ইউজারের প্রজেক্ট ভিজিট হিস্টরি ডাটাবেজে রেকর্ড করা
+            if (typeof window.recordProjectVisit === 'function') {
+                window.recordProjectVisit(currentProjectId, data);
+            }
+
             const scrollBody = document.getElementById('modalScrollBody');
             if (scrollBody) scrollBody.scrollTop = 0;
 
@@ -881,8 +907,7 @@ ${liveWebsite ? `🌐 লাইভ ডেমো: ${liveWebsite}\n` : ''}${projec
             const botDeepLink = `https://t.me/${botUsername}?startapp=${encodeURIComponent(pid)}`;
             const projectTitle = (currentProject && currentProject.title) ? currentProject.title : 'প্রজেক্ট';
             
-            // আপনার চাহিদা মতো নতুন টেক্সট
-            const shareCaption = `🔥 ${projectTitle} - ডেমো দেখতে লিংকে ক্লিক করুন:`;
+            const shareCaption = `🔥 ${projectTitle} - ডেমো দেখতে নিচের লিংকে ক্লিক করুন:`;
 
             copyTextToClipboard(botDeepLink).then(() => {
                 showToast("✅ ডেমো লিঙ্ক কপি হয়েছে!");
