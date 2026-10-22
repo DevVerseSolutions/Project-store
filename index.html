@@ -285,6 +285,9 @@
                             <span id="detailBadgeText" class="px-2.5 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px] font-bold uppercase">
                                 WEBSITE / APPS
                             </span>
+                            <span id="detailOfferBadge" class="hidden px-2.5 py-0.5 rounded-md bg-rose-500/20 border border-rose-500/40 text-rose-300 text-[10px] font-black uppercase tracking-wider animate-pulse">
+                                🔥 50% OFF
+                            </span>
                             <span class="flex items-center gap-1 text-[10px] font-bold text-amber-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-md">
                                 <i class="fas fa-star text-[9px]"></i> <span id="detailRatingText">4.9</span>
                             </span>
@@ -375,7 +378,7 @@
                     <h4 class="text-xs font-bold text-slate-400 mb-2.5 font-mono uppercase tracking-wider">Select License / Package</h4>
                     
                     <div class="relative bg-gradient-to-br from-[#0c1427] to-[#080d19] border-2 border-blue-500/80 rounded-2xl p-4 shadow-xl overflow-hidden">
-                        <div class="absolute top-0 right-0 bg-gradient-to-l from-amber-500 to-orange-500 text-slate-950 font-black text-[9px] px-3 py-1 rounded-bl-xl tracking-wider uppercase">
+                        <div id="licenseBadgeHot" class="absolute top-0 right-0 bg-gradient-to-l from-amber-500 to-orange-500 text-slate-950 font-black text-[9px] px-3 py-1 rounded-bl-xl tracking-wider uppercase">
                             HOT 🔥
                         </div>
 
@@ -475,6 +478,69 @@
         window.currentBuyerInfo = null;
         window.currentBannerData = null;
 
+        // বাংলা এবং ইংরেজি সংখ্যার নিখুঁত রূপান্তরকারী হেল্পার
+        window.toEnglishDigits = function(str) {
+            if (!str) return '0';
+            const bengaliToEnglish = {
+                '০': '0', '১': '1', '২': '2', '৩': '3', '৪': '4',
+                '৫': '5', '৬': '6', '৭': '7', '৮': '8', '৯': '9'
+            };
+            return str.toString().replace(/[০-৯]/g, d => bengaliToEnglish[d]);
+        };
+
+        window.toBengaliDigits = function(str) {
+            if (str === null || str === undefined) return '';
+            const englishToBengali = {
+                '0': '০', '1': '১', '2': '২', '3': '৩', '4': '৪',
+                '5': '৫', '6': '৬', '7': '৭', '8': '৮', '9': '৯'
+            };
+            return str.toString().replace(/[0-9]/g, d => englishToBengali[d]);
+        };
+
+        window.parseNumericPrice = function(val) {
+            if (!val) return 0;
+            let s = window.toEnglishDigits(val.toString()).replace(/[^0-9.]/g, '');
+            let num = parseFloat(s);
+            return isNaN(num) ? 0 : num;
+        };
+
+        // অফার ও মূল্য গণনা করার শতভাগ নির্ভুল ফাংশন
+        window.getCalculatedProjectPrice = function(item) {
+            let rawBDT = (item.priceBDT || '0').toString().trim().replace(/^[৳\s]+/, '').replace(/bdt/i, '').trim();
+            let rawUSD = (item.priceUSD || '0').toString().trim().replace(/^[\$\s]+/, '').replace(/usd/i, '').trim();
+
+            let numBDT = window.parseNumericPrice(rawBDT);
+            let numUSD = window.parseNumericPrice(rawUSD);
+
+            let hasOffer = item.hasOffer === true || item.hasOffer === 'true';
+            let offerPercent = parseFloat(window.toEnglishDigits(item.offerPercent || '0')) || 0;
+
+            let isBDTBengali = /[০-৯]/.test(rawBDT);
+            let isUSDBengali = /[০-৯]/.test(rawUSD);
+
+            let finalNumBDT = numBDT;
+            let finalNumUSD = numUSD;
+
+            if (hasOffer && offerPercent > 0 && offerPercent < 100) {
+                finalNumBDT = Math.round(numBDT - (numBDT * offerPercent / 100));
+                finalNumUSD = Math.round(numUSD - (numUSD * offerPercent / 100));
+            } else {
+                hasOffer = false;
+            }
+
+            let finalBDT = isBDTBengali ? window.toBengaliDigits(finalNumBDT) : String(finalNumBDT);
+            let finalUSD = isUSDBengali ? window.toBengaliDigits(finalNumUSD) : String(finalNumUSD);
+
+            return {
+                origBDT: rawBDT,
+                origUSD: rawUSD,
+                finalBDT: finalBDT,
+                finalUSD: finalUSD,
+                hasOffer: hasOffer,
+                offerPercent: offerPercent
+            };
+        };
+
         // ইউজার কোন প্রজেক্টে ক্লিক করলো তা ডাটাবেজে সংরক্ষণ করার ফাংশন
         window.recordProjectVisit = function(projectId, projectData) {
             if (!window.activeUserId || !projectId || !projectData) return;
@@ -488,7 +554,6 @@
                     timestamp: nowTime
                 }).catch(() => {});
 
-                // ইউজারের লাস্ট অ্যাক্টিভ টাইম আপডেট
                 const userRef = ref(db, `users/${window.activeUserId}`);
                 update(userRef, {
                     lastActive: new Date().toISOString()
@@ -592,7 +657,6 @@
                 keys.forEach((id) => {
                     const item = data[id];
 
-                    // ফিক্স: অ্যাডমিন প্যানেল থেকে যে প্রজেক্ট অফ করা থাকবে তা ইউজার স্টোরে দেখাবে না
                     if (item.isActive === false) {
                         return;
                     }
@@ -602,17 +666,23 @@
 
                     const thumbImage = item.thumb || (item.images && item.images.length > 0 ? item.images[0] : 'https://via.placeholder.com/400x300/060b17/ffffff?text=Preview');
 
-                    let cleanBDT = (item.priceBDT || '0').toString().trim().replace(/^[৳\s]+/, '').replace(/bdt/i, '').trim();
-                    let cleanUSD = (item.priceUSD || '0').toString().trim().replace(/^[\$\s]+/, '').replace(/usd/i, '').trim();
+                    const pricing = window.getCalculatedProjectPrice(item);
 
                     grid.innerHTML += `
-                        <div onclick="openProjectModal('${id}')" class="luxe-card p-2.5 flex flex-col justify-between relative overflow-hidden cursor-pointer">
+                        <div onclick="openProjectModal('${id}')" class="luxe-card p-2.5 flex flex-col justify-between relative overflow-hidden cursor-pointer group">
                             <div>
                                 <div class="w-full aspect-[4/3] bg-black/60 rounded-xl overflow-hidden mb-2 relative border border-white/5">
                                     <img src="${thumbImage}" alt="${item.title || 'Project'}" loading="lazy" class="w-full h-full object-cover">
+                                    
                                     <span class="absolute top-2 left-2 bg-black/80 border border-white/10 text-amber-300 text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider font-mono">
                                         ${item.badge || 'HOT'}
                                     </span>
+
+                                    ${pricing.hasOffer ? `
+                                        <span class="absolute top-2 right-2 bg-gradient-to-r from-rose-600 via-red-500 to-amber-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider font-mono shadow-lg border border-rose-300/40 animate-pulse flex items-center gap-1">
+                                            <i class="fas fa-fire text-[8px]"></i> ${pricing.offerPercent}% OFF
+                                        </span>
+                                    ` : ''}
                                 </div>
 
                                 <h3 class="text-xs font-bold text-slate-100 leading-snug line-clamp-2 mb-2 px-0.5 project-clean-title">
@@ -620,13 +690,19 @@
                                 </h3>
                                 
                                 <div class="flex items-center justify-between bg-black/40 border border-white/5 rounded-xl px-2.5 py-1.5 mb-2">
-                                    <div class="font-black text-amber-400 text-xs flex items-center gap-0.5">
-                                        <span>৳${cleanBDT}</span>
-                                        <span class="text-[9px] text-amber-300/80 font-normal">BDT</span>
+                                    <div class="flex flex-col">
+                                        ${pricing.hasOffer ? `<span class="text-[9px] text-slate-500 line-through leading-none font-mono">৳${pricing.origBDT}</span>` : ''}
+                                        <div class="font-black text-amber-400 text-xs flex items-center gap-0.5">
+                                            <span>৳${pricing.finalBDT}</span>
+                                            <span class="text-[9px] text-amber-300/80 font-normal">BDT</span>
+                                        </div>
                                     </div>
-                                    <div class="font-black text-sky-400 text-xs flex items-center gap-0.5">
-                                        <span>$${cleanUSD}</span>
-                                        <span class="text-[9px] text-sky-300/80 font-normal">USD</span>
+                                    <div class="flex flex-col items-end">
+                                        ${pricing.hasOffer ? `<span class="text-[9px] text-slate-500 line-through leading-none font-mono">$${pricing.origUSD}</span>` : ''}
+                                        <div class="font-black text-sky-400 text-xs flex items-center gap-0.5">
+                                            <span>$${pricing.finalUSD}</span>
+                                            <span class="text-[9px] text-sky-300/80 font-normal">USD</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -643,7 +719,6 @@
                     grid.innerHTML = '<div class="col-span-full text-center py-24 text-xs text-slate-500 font-mono">বর্তমানে কোনো সক্রিয় প্রজেক্ট নেই।</div>';
                 }
 
-                // ডাটা লোড হওয়ার পর ডাইরেক্ট প্রজেক্ট ওপেন করার ফাংশন কল
                 setTimeout(checkAndOpenDirectProject, 100);
 
             }, () => {
@@ -651,7 +726,6 @@
             });
         }
 
-        // ব্যানার রিয়েলটাইম লিসেনার
         function listenToRealtimeBanner() {
             const bannerRef = ref(db, 'site_banner');
             onValue(bannerRef, (snapshot) => {
@@ -774,8 +848,7 @@
                 username = url.replace(/^@/, '');
             }
 
-            let bdt = (projectData.priceBDT || '0').toString().trim().replace(/^[৳\s]+/, '').replace(/bdt/i, '').trim();
-            let usd = (projectData.priceUSD || '0').toString().trim().replace(/^[\$\s]+/, '').replace(/usd/i, '').trim();
+            const pInfo = window.getCalculatedProjectPrice(projectData);
             let buyer = window.currentBuyerInfo || (window.activeUserId ? `ID: ${window.activeUserId}` : 'Website Visitor');
 
             let projectPic = projectData.thumb || 
@@ -784,12 +857,17 @@
 
             let liveWebsite = projectData.demoUrl || projectData.websiteUrl || projectData.webUrl || projectData.liveUrl || '';
 
+            let priceTextLine = `💰 মূল্য: ৳${pInfo.finalBDT} BDT / $${pInfo.finalUSD} USD`;
+            if (pInfo.hasOffer) {
+                priceTextLine += ` (🔥 ${pInfo.offerPercent}% অফার ডিসকাউন্ট! রেগুলার মূল্য: ৳${pInfo.origBDT} BDT)`;
+            }
+
             let autoMessage = 
 `👋 হ্যালো অ্যাডমিন, আমি এই প্রজেক্টের Standard License অর্ডার করতে চাই:
 
 📌 প্রজেক্টের নাম: ${projectData.title || 'N/A'}
 🏷️ ক্যাটাগরি: ${projectData.badge || 'VIP'}
-💰 মূল্য: ৳${bdt} BDT / $${usd} USD
+${priceTextLine}
 ${liveWebsite ? `🌐 লাইভ ডেমো: ${liveWebsite}\n` : ''}${projectPic ? `🖼️ প্রজেক্ট ছবি: ${projectPic}\n` : ''}👤 ক্লায়েন্ট: ${buyer}
 
 আমি বিস্তারিত আলোচনা করে দ্রুত পেমেন্ট ও সেটআপ কনফার্ম করতে চাই।`;
@@ -891,13 +969,30 @@ ${liveWebsite ? `🌐 লাইভ ডেমো: ${liveWebsite}\n` : ''}${projec
             const appIcon = data.thumb || (data.images && data.images[0]) || 'https://via.placeholder.com/150';
             document.getElementById('detailAppIcon').src = appIcon;
 
-            let bdt = (data.priceBDT || '0').toString().trim().replace(/^[৳\s]+/, '').replace(/bdt/i, '').trim();
-            let usd = (data.priceUSD || '0').toString().trim().replace(/^[\$\s]+/, '').replace(/usd/i, '').trim();
+            // অফার ও প্রাইস হ্যান্ডলিং
+            const pricing = window.getCalculatedProjectPrice(data);
+            const offerBadgeEl = document.getElementById('detailOfferBadge');
+            const licenseBadgeHotEl = document.getElementById('licenseBadgeHot');
 
-            document.getElementById('licensePriceBDT').innerText = '৳' + bdt + ' BDT';
-            document.getElementById('licensePriceUSD').innerText = '$' + usd + ' USD';
-            document.getElementById('bottomBarPriceBDT').innerText = '৳' + bdt + ' BDT';
-            document.getElementById('bottomBarPriceUSD').innerText = '$' + usd + ' USD';
+            if (pricing.hasOffer) {
+                offerBadgeEl.innerHTML = `<i class="fas fa-fire mr-1"></i>${pricing.offerPercent}% OFF`;
+                offerBadgeEl.classList.remove('hidden');
+                licenseBadgeHotEl.innerHTML = `🔥 ${pricing.offerPercent}% OFF`;
+
+                document.getElementById('licensePriceBDT').innerHTML = `<span class="line-through text-slate-500 text-xs font-normal mr-1.5">৳${pricing.origBDT}</span>৳${pricing.finalBDT} BDT`;
+                document.getElementById('licensePriceUSD').innerHTML = `<span class="line-through text-slate-500 text-xs font-normal mr-1.5">$${pricing.origUSD}</span>$${pricing.finalUSD} USD`;
+
+                document.getElementById('bottomBarPriceBDT').innerHTML = `<span class="line-through text-slate-500 text-[10px] font-normal mr-1">৳${pricing.origBDT}</span>৳${pricing.finalBDT} BDT`;
+                document.getElementById('bottomBarPriceUSD').innerHTML = `<span class="line-through text-slate-500 text-[10px] font-normal mr-1">$${pricing.origUSD}</span>$${pricing.finalUSD} USD`;
+            } else {
+                offerBadgeEl.classList.add('hidden');
+                licenseBadgeHotEl.innerHTML = `HOT 🔥`;
+
+                document.getElementById('licensePriceBDT').innerText = '৳' + pricing.origBDT + ' BDT';
+                document.getElementById('licensePriceUSD').innerText = '$' + pricing.origUSD + ' USD';
+                document.getElementById('bottomBarPriceBDT').innerText = '৳' + pricing.origBDT + ' BDT';
+                document.getElementById('bottomBarPriceUSD').innerText = '$' + pricing.origUSD + ' USD';
+            }
 
             renderDynamicLists(data);
 
