@@ -212,6 +212,18 @@
         </p>
     </section>
 
+    <!-- ডাইনামিক লাইভ ব্যানার সেকশন -->
+    <section id="userBannerSection" class="max-w-5xl mx-auto px-3 sm:px-6 my-2 hidden relative z-10">
+        <div class="w-full rounded-2xl overflow-hidden border border-amber-400/25 bg-[#080d1a] shadow-[0_10px_30px_rgba(0,0,0,0.7)] group relative cursor-pointer" onclick="handleBannerClick()">
+            <img id="userBannerImage" src="" alt="Promotional Banner" class="w-full h-auto max-h-[175px] sm:max-h-[230px] object-cover block transition-transform duration-300 group-hover:scale-[1.01]">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3 pointer-events-none">
+                <span class="bg-amber-400 text-slate-950 text-[10px] font-black px-2.5 py-1 rounded-lg uppercase tracking-wider">
+                    <i class="fas fa-arrow-up-right-from-square mr-1"></i>ভিজিট করুন
+                </span>
+            </div>
+        </div>
+    </section>
+
     <!-- Project Store Responsive Grid -->
     <section class="max-w-6xl mx-auto px-3 sm:px-6 py-3 mb-20 flex-1 w-full relative z-10">
         <div id="projectsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
@@ -461,6 +473,7 @@
         window.firebaseDatabase = {};
         window.activeUserId = null;
         window.currentBuyerInfo = null;
+        window.currentBannerData = null;
 
         // ইউজার কোন প্রজেক্টে ক্লিক করলো তা ডাটাবেজে সংরক্ষণ করার ফাংশন
         window.recordProjectVisit = function(projectId, projectData) {
@@ -574,9 +587,17 @@
                 }
 
                 const keys = Object.keys(data).reverse();
+                let visibleCount = 0;
 
                 keys.forEach((id) => {
                     const item = data[id];
+
+                    // ফিক্স: অ্যাডমিন প্যানেল থেকে যে প্রজেক্ট অফ করা থাকবে তা ইউজার স্টোরে দেখাবে না
+                    if (item.isActive === false) {
+                        return;
+                    }
+
+                    visibleCount++;
                     window.firebaseDatabase[id] = item;
 
                     const thumbImage = item.thumb || (item.images && item.images.length > 0 ? item.images[0] : 'https://via.placeholder.com/400x300/060b17/ffffff?text=Preview');
@@ -618,11 +639,33 @@
                     `;
                 });
 
+                if (visibleCount === 0) {
+                    grid.innerHTML = '<div class="col-span-full text-center py-24 text-xs text-slate-500 font-mono">বর্তমানে কোনো সক্রিয় প্রজেক্ট নেই।</div>';
+                }
+
                 // ডাটা লোড হওয়ার পর ডাইরেক্ট প্রজেক্ট ওপেন করার ফাংশন কল
                 setTimeout(checkAndOpenDirectProject, 100);
 
             }, () => {
                 grid.innerHTML = '<div class="col-span-full text-center py-24 text-xs text-rose-400 font-mono">ডাটা লোড করতে সমস্যা হয়েছে!</div>';
+            });
+        }
+
+        // ব্যানার রিয়েলটাইম লিসেনার
+        function listenToRealtimeBanner() {
+            const bannerRef = ref(db, 'site_banner');
+            onValue(bannerRef, (snapshot) => {
+                const banner = snapshot.val();
+                window.currentBannerData = banner;
+                const bannerSec = document.getElementById('userBannerSection');
+                const bannerImg = document.getElementById('userBannerImage');
+
+                if (banner && banner.isActive !== false && banner.imageUrl) {
+                    bannerImg.src = banner.imageUrl;
+                    bannerSec.classList.remove('hidden');
+                } else {
+                    bannerSec.classList.add('hidden');
+                }
             });
         }
 
@@ -646,12 +689,12 @@
 
         handleTelegramAutoAuth();
         listenToProjects();
+        listenToRealtimeBanner();
         listenToRealtimeNotice();
     </script>
 
     <!-- UI & Controller Script -->
     <script>
-        // নির্দিষ্ট টেলিগ্রাম বট ইউজারনেম
         const TARGET_BOT_USERNAME = 'project_shop19_bot';
 
         let currentProject = null;
@@ -661,6 +704,21 @@
         let userImagesList = [];
         let adminImagesList = [];
         let activeImagesList = [];
+
+        function handleBannerClick() {
+            if (window.currentBannerData && window.currentBannerData.targetUrl) {
+                const url = window.currentBannerData.targetUrl.trim();
+                if (url && url !== '#') {
+                    if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.openTelegramLink === 'function' && url.includes('t.me')) {
+                        window.Telegram.WebApp.openTelegramLink(url);
+                    } else if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.openLink === 'function') {
+                        window.Telegram.WebApp.openLink(url);
+                    } else {
+                        window.open(url, '_blank');
+                    }
+                }
+            }
+        }
 
         function showToast(text) {
             const toast = document.getElementById('toastNotification');
@@ -809,7 +867,6 @@ ${liveWebsite ? `🌐 লাইভ ডেমো: ${liveWebsite}\n` : ''}${projec
             currentImgIdx = 0;
             currentTab = 'user';
 
-            // ইউজারের প্রজেক্ট ভিজিট হিস্টরি ডাটাবেজে রেকর্ড করা
             if (typeof window.recordProjectVisit === 'function') {
                 window.recordProjectVisit(currentProjectId, data);
             }
@@ -891,7 +948,6 @@ ${liveWebsite ? `🌐 লাইভ ডেমো: ${liveWebsite}\n` : ''}${projec
             }
         }
 
-        // আপগ্রেডেড প্রজেক্ট শেয়ার ফাংশন (project_shop19_bot এবং নতুন শেয়ার টেক্সট)
         function shareCurrentProject() {
             let pid = currentProjectId;
             if (!pid && currentProject && window.firebaseDatabase) {
@@ -920,7 +976,6 @@ ${liveWebsite ? `🌐 লাইভ ডেমো: ${liveWebsite}\n` : ''}${projec
                 showToast("✅ লিঙ্ক তৈরি হয়েছে!");
             });
 
-            // টেলিগ্রাম অ্যাপে শেয়ার শীট ওপেন করা
             if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.openTelegramLink === 'function') {
                 const tgShareUrl = `https://t.me/share/url?url=${encodeURIComponent(botDeepLink)}&text=${encodeURIComponent(shareCaption)}`;
                 window.Telegram.WebApp.openTelegramLink(tgShareUrl);
@@ -936,15 +991,12 @@ ${liveWebsite ? `🌐 লাইভ ডেমো: ${liveWebsite}\n` : ''}${projec
             }
         }
 
-        // টেলিগ্রাম স্টার্ট প্যারামিটার ও লিঙ্ক থেকে প্রজেক্ট আইডি রিড করার স্মার্ট ফাংশন
         function getTelegramStartParam() {
             try {
-                // ১. টেলিগ্রাম অফিশিয়াল WebApp SDK initDataUnsafe
                 if (window.Telegram?.WebApp?.initDataUnsafe?.start_param) {
                     return window.Telegram.WebApp.initDataUnsafe.start_param;
                 }
 
-                // ২. URL Search Query (?tgWebAppStartParam= / ?startapp= / ?p=)
                 const urlParams = new URLSearchParams(window.location.search);
                 const queryParam = urlParams.get('tgWebAppStartParam') || 
                                    urlParams.get('startapp') || 
@@ -953,7 +1005,6 @@ ${liveWebsite ? `🌐 লাইভ ডেমো: ${liveWebsite}\n` : ''}${projec
                                    urlParams.get('project');
                 if (queryParam) return queryParam;
 
-                // ৩. URL Hash (#tgWebAppStartParam= / #startapp=)
                 if (window.location.hash) {
                     const cleanHash = window.location.hash.replace(/^#/, '');
                     const hashParams = new URLSearchParams(cleanHash);
@@ -966,7 +1017,6 @@ ${liveWebsite ? `🌐 লাইভ ডেমো: ${liveWebsite}\n` : ''}${projec
             return null;
         }
 
-        // লিঙ্কে ক্লিক করলে সরাসরি নির্দিষ্ট প্রজেক্ট পপআপ ওপেন করার হ্যান্ডলার
         function checkAndOpenDirectProject() {
             try {
                 const targetId = getTelegramStartParam();
